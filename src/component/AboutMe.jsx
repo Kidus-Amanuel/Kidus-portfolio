@@ -10,8 +10,7 @@ const AboutMe = () => {
       <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-blue-600 rounded-full"></div>
       </h1>
       <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-        Hi, I'm Kidus Amanuel, a passionate web developer with a love for creating responsive, user-friendly applications. My skills include React, Node.js, and more. I enjoy tackling complex challenges and learning new technologies.
-      </p>
+      Hi, I’m Kidus Amanuel, a creative web developer passionate about building intuitive, user-friendly applications. I specialize in React, Node.js, and modern web technologies, blending logic with creativity to craft seamless digital experiences. I love solving complex problems, learning new tools, and pushing boundaries to create innovative solutions. 🚀</p>
       <Education/>
       <Skills />
     </div>

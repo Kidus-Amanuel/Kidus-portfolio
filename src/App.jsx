@@ -19,17 +19,17 @@ function App() {
     }, []);
 
     return (
-        <>
+        <div className="bg-white dark:bg-gray-900 w-full absolute left-0 p-4">
             {loading ? ( // Show loading spinner while loading
                 <Loading />
             ) : (
-                <div>
+                <div className='bg-white dark:bg-gray-900'>
                     <Navbar />
                     <Home />
                     <Footer />
                 </div>
             )}
-        </>
+        </div>
     );
 }
 

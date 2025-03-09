@@ -2,7 +2,7 @@ import Kidus from "../assets/KIDUS.jpg";
 
 const Footer = () => {
   return (
-    <footer className="bg-white dark:bg-gray-800 p-4 sm:p-6">
+    <footer className="bg-white dark:bg-gray-900 border-t py-2 border-gray-200p-4 sm:p-6">
       <div className="mx-auto max-w-screen-xl">
         <div className="flex flex-col items-center justify-center">
           {/* Branding */}

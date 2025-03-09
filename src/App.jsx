@@ -11,7 +11,7 @@ function App() {
     useEffect(() => {
         const loadApp = async () => {
             // Simulate loading (e.g., fetching data)
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise(resolve => setTimeout(resolve, 5000));
             setLoading(false); // Set loading to false after loading is complete
         };
 

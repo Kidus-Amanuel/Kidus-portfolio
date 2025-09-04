@@ -41,7 +41,7 @@ const Home = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 1 }}
             >
-              Full-Stack Web Developer, UI/UX Designer, Network Technician, Video Editor
+             I specialize in building scalable web apps, data-driven solutions, and modern full-stack systems
             </motion.p>
             <div className="flex flex-wrap gap-3">
             <a 

@@ -27,7 +27,7 @@ const WorkExperience = () => {
                 Full Stack Developer
               </h2>
               <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">
-                Connect Company • 2024
+                Connect Company • 2025
               </p>
               <div className="mt-2">
                 <span className="inline-block bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400 text-xs px-3 py-1 rounded-full">

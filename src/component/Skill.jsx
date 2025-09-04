@@ -7,6 +7,7 @@ import Mysql from "../assets/mysql-svgrepo-com.svg";
 import Re from "../assets/reactjs-svgrepo-com.svg";
 import Postgrsql from "../assets/postgresql-svgrepo-com.svg";
 import JavaScript from "../assets/javascript-svgrepo-com.svg";
+import Firebase from "../assets/Firebase.png";
 
 const Skills = () => {
   const [animate, setAnimate] = useState(false);
@@ -24,6 +25,7 @@ const Skills = () => {
     { name: "Tailwind CSS", icon: Tailwind, proficiency: "90%" },
     { name: "MySQL", icon: Mysql, proficiency: "90%" },
     { name: "PostgreSQL", icon: Postgrsql, proficiency: "90%" },
+    {name: "Firebase", icon: Firebase, proficiency: "90%"},
   ];
 
   return (

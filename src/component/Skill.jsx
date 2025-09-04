@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import Python from "../assets/python-svgrepo-com.svg";
 import Tailwind from "../assets/tailwindcss-icon-svgrepo-com.svg";
 import Nodejs from "../assets/nodejs-svgrepo-com.svg";
@@ -11,8 +12,8 @@ import Firebase from "../assets/Firebase.png";
 
 const Skills = () => {
   const [animate, setAnimate] = useState(false);
+
   useEffect(() => {
-    // Trigger animation after mount
     setAnimate(true);
   }, []);
 
@@ -25,36 +26,64 @@ const Skills = () => {
     { name: "Tailwind CSS", icon: Tailwind, proficiency: "90%" },
     { name: "MySQL", icon: Mysql, proficiency: "90%" },
     { name: "PostgreSQL", icon: Postgrsql, proficiency: "90%" },
-    {name: "Firebase", icon: Firebase, proficiency: "90%"},
+    { name: "Firebase", icon: Firebase, proficiency: "90%" },
   ];
 
   return (
-    <section id="skills" className="my-8">
-      <h2 className="text-3xl font-semibold text-gray-900 dark:text-white">Skills</h2>
-      <div className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <section id="skills" className="my-16">
+      <motion.h2
+        className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-10"
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        Skills & Technologies
+      </motion.h2>
+
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {skills.map((skill, index) => (
-          <div
+          <motion.div
             key={skill.name}
-            className="skill p-4 border rounded-lg shadow hover:shadow-lg transition-shadow duration-300 transform hover:scale-105"
-            style={{
-              opacity: animate ? 1 : 0,
-              transform: animate ? "translateY(0)" : "translateY(20px)",
-              transition: "opacity 0.5s ease-out, transform 0.5s ease-out",
-              transitionDelay: `${index * 0.1}s`,
-            }}
+            className="p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md hover:shadow-xl cursor-pointer group"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.15, duration: 0.6 }}
+            whileHover={{ scale: 1.05 }}
           >
-            <div className="flex items-center mb-2">
-              <img src={skill.icon} alt={skill.name} className="h-8 w-8 mr-2" />
-              <h3 className="text-xl font-medium text-gray-800 dark:text-white">{skill.name}</h3>
+            {/* Icon + Title */}
+            <div className="flex items-center mb-4">
+              <motion.img
+                src={skill.icon}
+                alt={skill.name}
+                className="h-10 w-10 mr-3"
+                whileHover={{ rotate: 15 }}
+                transition={{ type: "spring", stiffness: 200 }}
+              />
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                {skill.name}
+              </h3>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              <div
-                className="bg-blue-600 h-2.5 rounded-full transition-all duration-1000 ease-out"
-                style={{ width: animate ? skill.proficiency : "0%" }}
-              ></div>
+
+            {/* Progress Bar */}
+            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
+              <motion.div
+                className="bg-gradient-to-r from-blue-500 to-green-400 h-3 rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: animate ? skill.proficiency : "0%" }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+              />
             </div>
-            <span className="text-sm text-gray-500 mt-1">{skill.proficiency}</span>
-          </div>
+
+            {/* Proficiency Percentage */}
+            <motion.span
+              className="text-sm text-gray-600 dark:text-gray-400 mt-2 block"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 + index * 0.1 }}
+            >
+              {skill.proficiency}
+            </motion.span>
+          </motion.div>
         ))}
       </div>
     </section>

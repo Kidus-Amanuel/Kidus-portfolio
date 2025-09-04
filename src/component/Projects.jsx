@@ -5,6 +5,7 @@ import Spectrum from '../assets/Spect.jpg';
 import Movie from '../assets/movie.jpg';
 import Student from '../assets/Student.jpg';
 import SpectrumPortal from '../assets/FireShot Capture 001 - Vite + React - localhost.png';
+import Ale from '../assets/Ale.jpg';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 
@@ -15,6 +16,30 @@ import 'swiper/css/pagination';
 
 const Projects = () => {
   const projects = [
+    {
+  title: "Helloerf Website",
+  description:
+    "A modern, responsive company website with multi-language support, showcasing Helloerf’s services and brand identity with a clean UI and smooth navigation.",
+  image: Helloerf, // Replace with your project image import
+  link: "https://www.helloerf.com", // Replace with your GitHub link
+},
+
+{
+  title: "Ale Tube",
+  description:
+    "A video streaming platform designed specifically for content creators, enabling YouTubers to upload, share, and interact with their videos in a user-friendly interface.",
+  image: AleTube, // Replace with your project image import
+  link: "https://aletubes.netlify.app/", // Replace with your GitHub link
+},
+
+{
+  title: "Embro Coffee",
+  description:
+    "An e-commerce website for Embro Coffee featuring product listings, shopping cart functionality, and a seamless checkout process.",
+  image: EmbroCoffee, // Replace with your project image import
+  link: "https://emrocoffee.netlify.app/", // Replace with your GitHub link
+},
+
     {
       title: "Student Grading System",
       description:

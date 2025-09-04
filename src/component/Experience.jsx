@@ -2,6 +2,7 @@ import React from "react";
 import Softnet from '../assets/pi-school-system-logo-only.png';
 import ReccomendationSoftnet from "../assets/Recommended.pdf";
 import Spectrum from "../assets/logo.png";
+import Connect from "../assets/Connectlogo-03.png";
 import { FaCircle } from "react-icons/fa";
 
 const WorkExperience = () => {
@@ -14,6 +15,43 @@ const WorkExperience = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
         {/* Experience Card 1 */}
+        <div className="group bg-white border border-gray-200 rounded-xl shadow-lg p-6 dark:bg-gray-800 dark:border-gray-700 hover:shadow-xl transition-shadow duration-300">
+          <div className="flex items-start space-x-4 mb-6">
+            <div className="flex-shrink-0">
+              <div className="w-16 h-16 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center">
+                <img className="w-10 h-10 object-contain" src={Connect} alt="Spectrum logo" />
+              </div>
+            </div>
+            <div className="flex-1">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
+                Full Stack Developer
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">
+                Connect Company • 2024
+              </p>
+              <div className="mt-2">
+                <span className="inline-block bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400 text-xs px-3 py-1 rounded-full">
+                  Full-Time
+                </span>
+              </div>
+            </div>
+          </div>
+          <ul className="space-y-3">
+            {[
+  "Developed a full-stack Uber-for-Tractors system enabling customer support teams to register farmers, manage bookings, and track services.",
+  "Built responsive frontend interfaces with React and TailwindCSS, ensuring intuitive navigation and a smooth user experience.",
+  "Integrated Firebase Firestore for real-time data management, including farmer records, booking details, and service tracking.",
+  "Implemented booking workflows with filters, search, and role-based access control for admins and customer support staff."
+]
+.map((item, index) => (
+              <li key={index} className="flex items-start text-gray-600 dark:text-gray-300">
+                <FaCircle className="w-2 h-2 text-blue-600 mt-2 mr-3 flex-shrink-0" />
+                <span className="text-base leading-relaxed">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        {/* Experience Card 2 */}    
         <div className="group bg-white border border-gray-200 rounded-xl shadow-lg p-6 dark:bg-gray-800 dark:border-gray-700 hover:shadow-xl transition-shadow duration-300">
           <div className="flex items-start space-x-4 mb-6">
             <div className="flex-shrink-0">
@@ -50,7 +88,7 @@ const WorkExperience = () => {
           </ul>
         </div>
 
-        {/* Experience Card 2 */}
+        {/* Experience Card 3 */}
         <div className="group bg-white border border-gray-200 rounded-xl shadow-lg p-6 dark:bg-gray-800 dark:border-gray-700 hover:shadow-xl transition-shadow duration-300">
           <div className="flex items-start space-x-4 mb-6">
             <div className="flex-shrink-0">

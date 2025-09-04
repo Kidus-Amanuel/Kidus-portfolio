@@ -6,6 +6,8 @@ import Movie from '../assets/movie.jpg';
 import Student from '../assets/Student.jpg';
 import SpectrumPortal from '../assets/FireShot Capture 001 - Vite + React - localhost.png';
 import Ale from '../assets/Ale.jpg';
+import Helloerf from '../assets/Helloerf.png';
+import EmbroCoffee from '../assets/Emro.png';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 
@@ -28,7 +30,7 @@ const Projects = () => {
   title: "Ale Tube",
   description:
     "A video streaming platform designed specifically for content creators, enabling YouTubers to upload, share, and interact with their videos in a user-friendly interface.",
-  image: AleTube, // Replace with your project image import
+  image: Ale, // Replace with your project image import
   link: "https://aletubes.netlify.app/", // Replace with your GitHub link
 },
 

@@ -2,7 +2,7 @@
 import React from "react";
 import Image1 from '../assets/download.jpg';
 import Spectrum from '../assets/Spect.jpg';
-import Movie from '../assets/movie.jpg';
+import Movie from '../assets/mov.jpg';
 import Student from '../assets/Student.jpg';
 import SpectrumPortal from '../assets/FireShot Capture 001 - Vite + React - localhost.png';
 import Ale from '../assets/Ale.jpg';

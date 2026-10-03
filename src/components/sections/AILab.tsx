@@ -122,22 +122,31 @@ export function AILab() {
         {/* Input Area */}
         <form
           onSubmit={handleSubmit}
-          className="p-4 border-t border-white/10 bg-black/50 backdrop-blur-md"
+          className="bg-black/50 backdrop-blur-md"
         >
-          <div className="relative">
-            <input
-              value={input}
-              onChange={handleInputChange}
-              placeholder="Ask a question..."
-              className="w-full bg-white/10 border border-white/10 rounded-full pl-6 pr-14 py-4 focus:outline-none focus:border-white/30 transition-colors text-sm text-white placeholder:text-white/30"
-            />
-            <button
-              type="submit"
-              disabled={isLoading || !input}
-              className="absolute right-2 top-2 bottom-2 w-10 bg-white text-black rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors disabled:opacity-50"
-            >
-              <Send className="w-4 h-4" />
-            </button>
+          {/* Flowing silver separator between chat and input */}
+          <div className="relative h-px overflow-hidden">
+            <div className="absolute inset-0 bg-white/10" />
+            <div className="absolute left-0 top-0 h-px w-[40%] animate-flow-right bg-gradient-to-r from-transparent via-white/70 to-transparent" />
+            <div className="absolute right-0 top-0 h-px w-[40%] animate-flow-left bg-gradient-to-r from-transparent via-white/70 to-transparent" />
+          </div>
+
+          <div className="relative p-4">
+            <div className="relative">
+              <input
+                value={input}
+                onChange={handleInputChange}
+                placeholder="Ask a question..."
+                className="w-full bg-white/10 border border-white/10 rounded-full pl-6 pr-14 py-4 focus:outline-none focus:border-white/30 transition-colors text-sm text-white placeholder:text-white/30"
+              />
+              <button
+                type="submit"
+                disabled={isLoading || !input}
+                className="absolute right-2 top-2 bottom-2 w-10 bg-white text-black rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors disabled:opacity-50"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </form>
       </motion.div>

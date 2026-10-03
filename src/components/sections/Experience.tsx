@@ -22,7 +22,7 @@ export async function Experience() {
   const displayExperience = dbExperience.length > 0 ? dbExperience : fallbackExperiences;
 
   return (
-    <section id="experience" className="py-32 px-6 md:px-12 lg:px-24 bg-black border-t border-white/10">
+    <section id="experience" className="py-8 md:py-12 px-6 md:px-12 lg:px-24 bg-black border-t border-white/10">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-sm font-medium opacity-50 uppercase tracking-widest mb-16 text-center">Experience</h2>
         <div className="space-y-12">

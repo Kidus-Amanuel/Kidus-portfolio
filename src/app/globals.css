@@ -28,3 +28,24 @@
   display: flex;
   width: max-content;
 }
+
+/* Silver light flowing along a horizontal line (left → right) */
+@keyframes flow-right {
+  0%   { transform: translate(-100%, -50%); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translate(250%, -50%); opacity: 0; }
+}
+/* Silver light flowing along a horizontal line (right → left) */
+@keyframes flow-left {
+  0%   { transform: translate(100%, -50%); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translate(-250%, -50%); opacity: 0; }
+}
+.animate-flow-right {
+  animation: flow-right 4.5s linear infinite;
+}
+.animate-flow-left {
+  animation: flow-left 4.5s linear infinite;
+}

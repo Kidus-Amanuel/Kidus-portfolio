@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 export function Recommendations() {
   return (
-    <section id="recommendations" className="py-32 px-6 md:px-12 lg:px-24 bg-black border-t border-white/10">
+    <section id="recommendations" className="py-8 md:py-12 px-6 md:px-12 lg:px-24 bg-black border-t border-white/10">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-sm font-medium opacity-50 uppercase tracking-widest mb-16 text-center">What People Say</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

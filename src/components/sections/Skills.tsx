@@ -9,7 +9,7 @@ const skills = {
 
 export function Skills() {
   return (
-    <section id="skills" className="py-24 px-6 md:px-12 lg:px-24 bg-black border-t border-white/10">
+    <section id="skills" className="py-8 md:py-12 px-6 md:px-12 lg:px-24 bg-black border-t border-white/10">
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-sm font-medium opacity-50 uppercase tracking-widest mb-16">Technical Arsenal</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">

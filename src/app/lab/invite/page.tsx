@@ -3,6 +3,8 @@ import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import confetti from "canvas-confetti";
+import { GameNavbar } from "@/components/lab/GameNavbar";
+import { GameFooter } from "@/components/lab/GameFooter";
 
 const noMessages = [
   "No",
@@ -145,10 +147,14 @@ function InviteContent() {
 
 export default function InvitePage() {
   return (
-    <main className="min-h-screen bg-black text-white selection:bg-white selection:text-black font-sans relative">
-      <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-white/50 tracking-widest uppercase text-sm">Loading...</div>}>
-        <InviteContent />
-      </Suspense>
-    </main>
+    <>
+      <GameNavbar />
+      <main className="min-h-screen bg-black text-white selection:bg-white selection:text-black font-sans relative pt-20">
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-white/50 tracking-widest uppercase text-sm">Loading...</div>}>
+          <InviteContent />
+        </Suspense>
+      </main>
+      <GameFooter />
+    </>
   );
 }

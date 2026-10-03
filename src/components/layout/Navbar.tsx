@@ -8,14 +8,14 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
-  // Hide the public navbar on the admin dashboard
-  if (pathname?.startsWith("/admin")) return null;
-
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Hide the public navbar on the admin dashboard and on the Yes-Only game (it has its own nav)
+  if (pathname?.startsWith("/admin") || pathname?.startsWith("/lab/invite")) return null;
 
   const links = ["About", "Experience", "Work", "Skills", "Contact"];
 

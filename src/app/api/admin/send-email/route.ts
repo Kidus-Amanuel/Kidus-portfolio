@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     // Get all active subscribers from Neon DB
     const subscribers = await prisma.subscriber.findMany({
       where: { status: "active" },
-      select: { email: true },
+      select: { email: true, name: true },
     });
 
     if (subscribers.length === 0) {

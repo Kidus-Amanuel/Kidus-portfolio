@@ -410,10 +410,29 @@ function InviteContent() {
         </motion.button>
       </div>
 
-      {noCount > 0 && noCount < 6 && (
-        <p className="text-xs text-white/40 mt-8 italic z-10">
-          {6 - noCount} more no{6 - noCount === 1 ? "" : "s"} and we auto-accept 😏
-        </p>
+      {/* NO counter — 6 dots that fill as the user tries to escape */}
+      {phase === "ask" && (
+        <div className="mt-10 flex items-center justify-center gap-3 z-10">
+          <span className="text-[10px] uppercase tracking-widest text-white/40">
+            No
+          </span>
+          <div className="flex gap-1.5">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <motion.div
+                key={i}
+                initial={false}
+                animate={{ scale: i < noCount ? 1.2 : 1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                  i < noCount ? "bg-rose-400" : "bg-white/15"
+                }`}
+              />
+            ))}
+          </div>
+          <span className="text-[10px] uppercase tracking-widest text-white/40 tabular-nums">
+            {noCount}/6
+          </span>
+        </div>
       )}
     </div>
   );

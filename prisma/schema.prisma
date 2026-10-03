@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model InviteResponse {
+  id          String   @id @default(cuid())
+  senderName  String
+  friendName  String
+  plan        String
+  ipHash      String?  
+  acceptedAt  DateTime @default(now())
+}
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  status    String   @default("active") // "active" | "unsubscribed"
+  createdAt DateTime @default(now())
+}
+
+// ==========================================
+// PORTFOLIO CMS CONTENT
+// ==========================================
+
+model Experience {
+  id          String   @id @default(cuid())
+  company     String
+  role        String
+  startDate   String
+  endDate     String
+  description String   @db.Text
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Education {
+  id          String   @id @default(cuid())
+  school      String
+  degree      String
+  startDate   String
+  endDate     String
+  description String?  @db.Text
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  category    String
+  description String   @db.Text
+  tags        String[] // PostgreSQL supports string arrays natively
+  link        String?
+  github      String?
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Certificate {
+  id          String   @id @default(cuid())
+  name        String
+  issuer      String
+  date        String
+  url         String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model EmailTemplate {
+  id        String   @id @default(cuid())
+  name      String   // e.g. "IBM Hackathon Announcement"
+  subject   String
+  html      String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

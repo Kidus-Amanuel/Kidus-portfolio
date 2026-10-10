@@ -9,23 +9,26 @@ import { Skills } from "@/components/sections/Skills";
 import { Recommendations } from "@/components/sections/Recommendations";
 import { Contact } from "@/components/sections/Contact";
 import { AILab } from "@/components/sections/AILab";
+import { MoreAboutToggle } from "@/components/ui/MoreAboutToggle";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white selection:bg-white selection:text-black">
       <Hero />
-      <section className="px-6 md:px-12 lg:px-24 py-32 bg-black border-t border-white/10">
+      <section className="px-6 md:px-12 lg:px-24 py-12 md:py-16 bg-black border-t border-white/10">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
           <AboutMe />
           <AILab />
         </div>
       </section>
-      <Experience />
-      <Education />
-      <Certificates />
-      <Projects />
-      <Skills />
-      <Recommendations />
+      <MoreAboutToggle>
+        <Experience />
+        <Education />
+        <Certificates />
+        <Projects />
+        <Skills />
+        <Recommendations />
+      </MoreAboutToggle>
       <Contact />
       <Footer />
     </main>

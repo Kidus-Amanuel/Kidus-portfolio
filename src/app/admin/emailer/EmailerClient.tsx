@@ -1,17 +1,26 @@
 "use client";
 import { useState, useRef } from "react";
-import { Send, Save, Loader2, Code, Eye, Trash2, ChevronRight, PlayCircle, CheckCircle2, List } from "lucide-react";
+import { Send, Save, Loader2, Code, Eye, Trash2, ChevronRight, PlayCircle, CheckCircle2, List, Wand2 } from "lucide-react";
 import { saveTemplate, deleteTemplate, createCampaign } from "./actions";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-export function EmailerClient({ templates, campaigns = [] }: { templates: any[], campaigns?: any[] }) {
+export function EmailerClient({ templates, campaigns = [], settings }: { templates: any[], campaigns?: any[], settings?: any }) {
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [viewMode, setViewMode] = useState<"code" | "preview">("code");
   const [showSaveForm, setShowSaveForm] = useState(false);
   const [templateName, setTemplateName] = useState("");
   
+  const [customVars, setCustomVars] = useState<Record<string, string>>({
+    portfolio_url: "https://kidus.dev", // or NEXT_PUBLIC_APP_URL
+    linkedin_url: settings?.linkedinUrl || "",
+    github_url: settings?.githubUrl || "",
+    instagram_url: settings?.instagramUrl || "",
+    upwork_url: settings?.upworkUrl || "",
+    contact_email: settings?.contactEmail || "",
+    unsubscribe_url: "https://kidus.dev/unsubscribe"
+  });
   // Campaign state
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const [batchSize, setBatchSize] = useState(50);
@@ -209,6 +218,58 @@ export function EmailerClient({ templates, campaigns = [] }: { templates: any[],
               </div>
             )}
           </div>
+          
+          {/* Dynamic Variable Detector */}
+          {(() => {
+            const matches = Array.from(body.matchAll(/\{\{?([a-zA-Z0-9_]+)\}?\}/g)).map(m => m[1].toLowerCase());
+            const uniqueVars = Array.from(new Set(matches)).filter(v => v !== 'name' && v !== 'email');
+            
+            if (uniqueVars.length === 0) return null;
+
+            return (
+              <div className="bg-white/5 border border-blue-500/30 p-5 rounded-2xl shadow-[0_0_15px_rgba(59,130,246,0.1)]">
+                <h3 className="text-xs uppercase tracking-widest text-blue-400 mb-4 font-bold flex items-center gap-2">
+                  <Wand2 className="w-4 h-4" /> Detected Template Variables
+                </h3>
+                <p className="text-xs text-white/50 mb-4">
+                  We found these variables in your HTML. These are automatically mapped from your Database Site Settings, but you can override them here before saving the template if you want to hardcode them.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {uniqueVars.map(v => (
+                    <div key={v} className="flex flex-col gap-1.5">
+                      <label className="text-xs font-mono text-blue-300">&#123;{v}&#125;</label>
+                      <input 
+                        type="text" 
+                        value={customVars[v] || ""} 
+                        onChange={(e) => setCustomVars(prev => ({...prev, [v]: e.target.value}))}
+                        className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500/50 transition-colors" 
+                        placeholder={`Value for ${v}...`}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <button 
+                  type="button" 
+                  onClick={() => {
+                    let newBody = body;
+                    let newSubject = subject;
+                    Object.entries(customVars).forEach(([k, val]) => {
+                      if(val && uniqueVars.includes(k)) {
+                        const regex = new RegExp(`\\{\\{?${k}\\}?\\}`, 'gi');
+                        newBody = newBody.replace(regex, val);
+                        newSubject = newSubject.replace(regex, val);
+                      }
+                    });
+                    setBody(newBody);
+                    setSubject(newSubject);
+                  }}
+                  className="mt-5 w-full py-2.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 transition-colors rounded-xl text-sm font-bold flex items-center justify-center gap-2"
+                >
+                  <Code className="w-4 h-4" /> Hardcode Values into HTML Now
+                </button>
+              </div>
+            );
+          })()}
 
           {/* Batch Settings */}
           {selectedTemplateId && (

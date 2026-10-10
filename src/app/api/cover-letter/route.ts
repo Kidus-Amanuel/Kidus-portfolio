@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     const { prompt } = await req.json();
 
     const result = await streamWithKeyRotation({
-      modelName: 'gemini-1.5-pro-latest',
+      modelName: 'gemini-2.0-flash',
       system: SYSTEM_PROMPT,
       messages: [{ role: 'user', content: `Here is the Job Description:\n\n${prompt}` }],
       temperature: 0.7,

@@ -194,7 +194,14 @@ export function EmailerClient({ templates, campaigns = [] }: { templates: any[],
                   </div>
                 ) : (
                   <iframe
-                    srcDoc={body.replace(/\{\{name\}\}/gi, "Kidus Amanuel").replace(/\{\{email\}\}/gi, "preview@example.com")}
+                    srcDoc={body
+                      .replace(/\{\{?name\}?\}/gi, "Kidus Amanuel")
+                      .replace(/\{\{?email\}?\}/gi, "preview@example.com")
+                      .replace(/\{\{?portfolio_url\}?\}/gi, "https://kidus.dev")
+                      .replace(/\{\{?linkedin_url\}?\}/gi, "https://linkedin.com/in/kidus-amanuel")
+                      .replace(/\{\{?github_url\}?\}/gi, "https://github.com/Kidus-Amanuel")
+                      .replace(/\{\{?unsubscribe_url\}?\}/gi, "#unsubscribe")
+                    }
                     className="w-full h-full border-0 bg-white"
                     title="Email Preview"
                   />

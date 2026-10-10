@@ -45,15 +45,33 @@ export async function processEmailBatches(): Promise<{
       continue;
     }
 
+    const siteSettings = await prisma.siteSettings.findUnique({ where: { id: "global" } });
+    const linkedinUrl = siteSettings?.linkedinUrl || "https://linkedin.com/in/kidus-amanuel";
+    const githubUrl = siteSettings?.githubUrl || "https://github.com/Kidus-Amanuel";
+    const portfolioUrl = process.env.NEXT_PUBLIC_APP_URL || "https://kidus.dev";
+    
     for (const delivery of deliveries) {
       try {
         const s = delivery.subscriber;
-        const subject = campaign.template.subject.replace(/\{\{name\}\}/gi, s.name || "there");
-        const html = campaign.template.html
-          .replace(/\{\{name\}\}/gi, s.name || "there")
-          .replace(/\{\{email\}\}/gi, s.email);
-
         const unsubUrl = `${process.env.NEXT_PUBLIC_APP_URL}/unsubscribe?email=${encodeURIComponent(s.email)}`;
+        
+        let subject = campaign.template.subject;
+        let html = campaign.template.html;
+
+        // Replace both {{name}} and {name} formats
+        const replaceVars = (text: string) => {
+          return text
+            .replace(/\{\{?name\}?\}/gi, s.name || "there")
+            .replace(/\{\{?email\}?\}/gi, s.email)
+            .replace(/\{\{?portfolio_url\}?\}/gi, portfolioUrl)
+            .replace(/\{\{?linkedin_url\}?\}/gi, linkedinUrl)
+            .replace(/\{\{?github_url\}?\}/gi, githubUrl)
+            .replace(/\{\{?unsubscribe_url\}?\}/gi, unsubUrl);
+        };
+
+        subject = replaceVars(subject);
+        html = replaceVars(html);
+
         const footer = `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:40px;border-top:1px solid #eaeaea;padding-top:20px;"><tr><td align="center" style="font-family:sans-serif;font-size:12px;color:#888;">You're receiving this because you subscribed to updates from Kidus Amanuel.<br/><a href="${unsubUrl}" style="color:#555;text-decoration:underline;">Unsubscribe</a></td></tr></table>`;
 
         await transporter.sendMail({

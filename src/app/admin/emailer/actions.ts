@@ -89,3 +89,36 @@ export async function getCampaignsWithStats() {
     return { ...c, total, sent, failed, pending };
   });
 }
+
+// Triggered from the admin Queue page — runs on the server so CRON_SECRET stays private
+export async function triggerCronNow(): Promise<{ ok: boolean; message: string }> {
+  try {
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const cronSecret = process.env.CRON_SECRET;
+
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (cronSecret) {
+      headers["Authorization"] = `Bearer ${cronSecret}`;
+    }
+
+    const res = await fetch(`${appUrl}/api/cron/process-emails`, {
+      method: "GET",
+      headers,
+      cache: "no-store",
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      return { ok: false, message: data?.error || `HTTP ${res.status}` };
+    }
+
+    revalidatePath("/admin/emailer/queue");
+    return {
+      ok: true,
+      message: `Batch sent! ${data.totalSentThisRun ?? 0} email(s) processed across ${data.processedCampaigns ?? 0} campaign(s).`,
+    };
+  } catch (err: any) {
+    return { ok: false, message: err?.message || "Unknown error" };
+  }
+}

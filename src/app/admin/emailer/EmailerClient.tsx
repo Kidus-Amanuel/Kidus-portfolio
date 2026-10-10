@@ -135,14 +135,16 @@ export function EmailerClient({ templates, campaigns = [] }: { templates: any[],
           <form
             ref={formRef}
             action={async (fd) => {
-              fd.set("subject", subject);
-              fd.set("body", body);
               await saveTemplate(fd);
               setShowSaveForm(false);
               setTemplateName("");
             }}
             className="mb-6 p-5 border border-white/10 rounded-2xl bg-white/5 flex gap-3"
           >
+            {/* Hidden inputs to pass state to Server Action */}
+            <input type="hidden" name="subject" value={subject} />
+            <input type="hidden" name="body" value={body} />
+            
             <input
               name="templateName"
               value={templateName}

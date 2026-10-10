@@ -53,6 +53,16 @@ export async function processEmailBatches(): Promise<{
     for (const delivery of deliveries) {
       try {
         const s = delivery.subscriber;
+        
+        // Skip if they unsubscribed while waiting in the queue
+        if (s.status === "unsubscribed") {
+          await prisma.emailDelivery.update({
+            where: { id: delivery.id },
+            data: { status: "FAILED", error: "User unsubscribed" },
+          });
+          continue;
+        }
+
         const unsubUrl = `${process.env.NEXT_PUBLIC_APP_URL}/unsubscribe?email=${encodeURIComponent(s.email)}`;
         
         let subject = campaign.template.subject;

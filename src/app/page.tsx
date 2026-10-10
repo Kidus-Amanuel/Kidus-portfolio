@@ -11,8 +11,13 @@ import { Contact } from "@/components/sections/Contact";
 import { AILab } from "@/components/sections/AILab";
 import { MoreAboutToggle } from "@/components/ui/MoreAboutToggle";
 import { Games } from "@/components/sections/Games";
+import { prisma } from "@/lib/db";
 
-export default function Home() {
+export default async function Home() {
+  const settings = await prisma.siteSettings.findUnique({
+    where: { id: "global" }
+  });
+
   return (
     <main className="min-h-screen bg-black text-white selection:bg-white selection:text-black">
       <Hero />
@@ -31,7 +36,7 @@ export default function Home() {
         <Recommendations />
       </MoreAboutToggle>
       <Games />
-      <Contact />
+      <Contact settings={settings} />
       <Footer />
     </main>
   );

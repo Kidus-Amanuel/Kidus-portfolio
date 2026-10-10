@@ -114,3 +114,14 @@ model Answer {
 
   @@index([questionId])
 }
+
+model SiteSettings {
+  id             String   @id @default("global")
+  contactEmail   String   @default("kidusamanuel@yahoo.com")
+  senderEmail    String   @default("contact@kidus.dev")
+  githubUrl      String   @default("https://github.com/Kidus-Amanuel")
+  linkedinUrl    String   @default("https://linkedin.com/in/kidus-amanuel")
+  instagramUrl   String   @default("")
+  upworkUrl      String   @default("")
+  updatedAt      DateTime @updatedAt
+}

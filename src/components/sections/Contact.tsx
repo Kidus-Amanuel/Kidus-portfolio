@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-export function Contact() {
+export function Contact({ settings }: { settings: any }) {
   const [formState, setFormState] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
 
@@ -64,9 +64,21 @@ export function Contact() {
               <div>
                 <h3 className="text-xs font-medium opacity-50 uppercase tracking-widest mb-4">Connect</h3>
                 <ul className="space-y-4">
-                  <li><a href="mailto:kidus@example.com" className="text-lg hover:opacity-70 transition-opacity">Email me directly</a></li>
-                  <li><a href="https://linkedin.com/in/kidus" target="_blank" rel="noreferrer" className="text-lg hover:opacity-70 transition-opacity">LinkedIn</a></li>
-                  <li><a href="#" className="text-lg hover:opacity-70 transition-opacity">Upwork</a></li>
+                  {settings?.contactEmail && (
+                    <li><a href={`mailto:${settings.contactEmail}`} className="text-lg hover:opacity-70 transition-opacity">Email me directly</a></li>
+                  )}
+                  {settings?.linkedinUrl && (
+                    <li><a href={settings.linkedinUrl} target="_blank" rel="noreferrer" className="text-lg hover:opacity-70 transition-opacity">LinkedIn</a></li>
+                  )}
+                  {settings?.githubUrl && (
+                    <li><a href={settings.githubUrl} target="_blank" rel="noreferrer" className="text-lg hover:opacity-70 transition-opacity">GitHub</a></li>
+                  )}
+                  {settings?.instagramUrl && (
+                    <li><a href={settings.instagramUrl} target="_blank" rel="noreferrer" className="text-lg hover:opacity-70 transition-opacity">Instagram</a></li>
+                  )}
+                  {settings?.upworkUrl && (
+                    <li><a href={settings.upworkUrl} target="_blank" rel="noreferrer" className="text-lg hover:opacity-70 transition-opacity">Upwork</a></li>
+                  )}
                 </ul>
               </div>
               <div>

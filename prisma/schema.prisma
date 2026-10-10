@@ -16,20 +16,21 @@ model ContactMessage {
 }
 
 model InviteResponse {
-  id          String   @id @default(cuid())
-  senderName  String
-  friendName  String
-  plan        String
-  ipHash      String?  
-  acceptedAt  DateTime @default(now())
+  id         String   @id @default(cuid())
+  senderName String
+  friendName String
+  plan       String
+  ipHash     String?
+  acceptedAt DateTime @default(now())
 }
 
 model Subscriber {
-  id        String   @id @default(cuid())
-  name      String?
-  email     String   @unique
-  status    String   @default("active") // "active" | "unsubscribed"
-  createdAt DateTime @default(now())
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  status        String          @default("active") // "active" | "unsubscribed"
+  createdAt     DateTime        @default(now())
+  EmailDelivery EmailDelivery[]
 }
 
 // ==========================================
@@ -72,22 +73,23 @@ model Project {
 }
 
 model Certificate {
-  id          String   @id @default(cuid())
-  name        String
-  issuer      String
-  date        String
-  url         String?
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  name      String
+  issuer    String
+  date      String
+  url       String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
 }
 
 model EmailTemplate {
-  id        String   @id @default(cuid())
-  name      String   // e.g. "IBM Hackathon Announcement"
-  subject   String
-  html      String   @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String          @id @default(cuid())
+  name          String // e.g. "IBM Hackathon Announcement"
+  subject       String
+  html          String          @db.Text
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  EmailCampaign EmailCampaign[]
 }
 
 // ==========================================
@@ -95,33 +97,64 @@ model EmailTemplate {
 // ==========================================
 
 model Question {
-  id          String   @id @default(cuid())
-  normalized  String   @unique
-  original    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(cuid())
+  normalized String   @unique
+  original   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  answers     Answer[]
+  answers Answer[]
 }
 
 model Answer {
-  id          String   @id @default(cuid())
-  questionId  String
-  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  content     String   @db.Text
-  usageCount  Int      @default(0)
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  content    String   @db.Text
+  usageCount Int      @default(0)
+  createdAt  DateTime @default(now())
 
   @@index([questionId])
 }
 
 model SiteSettings {
-  id             String   @id @default("global")
-  contactEmail   String   @default("kidusamanuel@yahoo.com")
-  senderEmail    String   @default("contact@kidus.dev")
-  githubUrl      String   @default("https://github.com/Kidus-Amanuel")
-  linkedinUrl    String   @default("https://linkedin.com/in/kidus-amanuel")
-  instagramUrl   String   @default("")
-  upworkUrl      String   @default("")
-  updatedAt      DateTime @updatedAt
+  id           String   @id @default("global")
+  contactEmail String   @default("kidusamanuel@yahoo.com")
+  senderEmail  String   @default("contact@kidus.dev")
+  githubUrl    String   @default("https://github.com/Kidus-Amanuel")
+  linkedinUrl  String   @default("https://linkedin.com/in/kidus-amanuel")
+  instagramUrl String   @default("")
+  upworkUrl    String   @default("")
+  updatedAt    DateTime @updatedAt
+}
+
+model EmailCampaign {
+  id              String        @id @default(cuid())
+  templateId      String
+  template        EmailTemplate @relation(fields: [templateId], references: [id])
+  status          String        @default("DRAFT") // DRAFT, RUNNING, PAUSED, COMPLETED
+  batchSize       Int           @default(50)
+  intervalMinutes Int           @default(10)
+  nextRunAt       DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  deliveries EmailDelivery[]
+}
+
+model EmailDelivery {
+  id           String        @id @default(cuid())
+  campaignId   String
+  campaign     EmailCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  subscriberId String
+  subscriber   Subscriber    @relation(fields: [subscriberId], references: [id], onDelete: Cascade)
+  templateId   String
+  status       String        @default("PENDING") // PENDING, SENT, FAILED
+  error        String?       @db.Text
+  sentAt       DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@unique([subscriberId, templateId])
+  @@index([campaignId, status])
 }

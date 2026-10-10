@@ -10,7 +10,7 @@ export async function GET(req: Request) {
     // 1. Basic security check (Optional: Vercel CRON_SECRET header)
     const authHeader = req.headers.get("authorization");
     const cronSecret = process.env.CRON_SECRET;
-    if (cronSecret && authHeader !== "Bearer " + cronSecret) {
+    if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -67,10 +67,10 @@ export async function GET(req: Request) {
             .replace(/\{\{email\}\}/gi, s.email);
 
           await transporter.sendMail({
-            from: "Kidus Amanuel" <+process.env.GMAIL_USER+>,
+            from: `"Kidus Amanuel" <${process.env.GMAIL_USER}>`,
             to: s.email,
             subject,
-            html: html + <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 40px; border-top: 1px solid #eaeaea; padding-top: 20px;"><tr><td align="center" style="font-family: sans-serif; font-size: 12px; color: #888;">You're receiving this because you subscribed to updates from Kidus Amanuel.<br/><a href="+process.env.NEXT_PUBLIC_APP_URL+/unsubscribe?email=+encodeURIComponent(s.email)+" style="color: #555; text-decoration: underline;">Unsubscribe</a></td></tr></table>,
+            html: html + `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 40px; border-top: 1px solid #eaeaea; padding-top: 20px;"><tr><td align="center" style="font-family: sans-serif; font-size: 12px; color: #888;">You're receiving this because you subscribed to updates from Kidus Amanuel.<br/><a href="${process.env.NEXT_PUBLIC_APP_URL}/unsubscribe?email=${encodeURIComponent(s.email)}" style="color: #555; text-decoration: underline;">Unsubscribe</a></td></tr></table>`,
           });
 
           await prisma.emailDelivery.update({

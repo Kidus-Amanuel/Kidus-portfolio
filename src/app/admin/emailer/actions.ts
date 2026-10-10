@@ -22,9 +22,6 @@ export async function deleteTemplate(formData: FormData) {
 }
 
 export async function createCampaign(templateId: string, batchSize: number, intervalMinutes: number) {
-  // 1. Check if campaign already exists for this template that isn't completed
-  // To keep it simple, we just create a new campaign
-  
   const subscribers = await prisma.subscriber.findMany({ where: { status: "active" } });
   if (subscribers.length === 0) return { error: "No subscribers found" };
 
@@ -38,7 +35,6 @@ export async function createCampaign(templateId: string, batchSize: number, inte
     }
   });
 
-  // Create deliveries (using createMany for efficiency)
   const deliveryData = subscribers.map(sub => ({
     campaignId: campaign.id,
     subscriberId: sub.id,
@@ -47,8 +43,6 @@ export async function createCampaign(templateId: string, batchSize: number, inte
   }));
 
   try {
-    // Note: If some of these violate the unique constraint (already sent), 
-    // Prisma createMany skipDuplicates might be needed.
     await prisma.emailDelivery.createMany({
       data: deliveryData,
       skipDuplicates: true, 
@@ -59,6 +53,21 @@ export async function createCampaign(templateId: string, batchSize: number, inte
 
   revalidatePath("/admin/emailer");
   return { success: true, campaignId: campaign.id };
+}
+
+export async function toggleCampaignStatus(id: string, currentStatus: string) {
+  if (currentStatus === "RUNNING") {
+    await prisma.emailCampaign.update({
+      where: { id },
+      data: { status: "PAUSED", nextRunAt: null }
+    });
+  } else if (currentStatus === "PAUSED") {
+    await prisma.emailCampaign.update({
+      where: { id },
+      data: { status: "RUNNING", nextRunAt: new Date() }
+    });
+  }
+  revalidatePath("/admin/emailer");
 }
 
 export async function getCampaignsWithStats() {

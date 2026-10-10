@@ -33,7 +33,7 @@ export default async function AdminDashboard() {
   }
 
   const stats = [
-    { label: "Total Subscribers", value: totalSubs, sub: \\ active\, icon: Users, href: "/admin/subscribers" },
+    { label: "Total Subscribers", value: totalSubs, sub: `${activeSubs} active`, icon: Users, href: "/admin/subscribers" },
     { label: "Emails Sent", value: totalSentEmails, sub: "All time", icon: Mail, href: "/admin/emailer" },
     { label: "Contact Messages", value: contactCount, sub: "From portfolio", icon: MessageSquare, href: "/admin/contacts" },
     { label: "Invite Accepts", value: inviteCount, sub: "Yes responses", icon: Send, href: "/admin/invites" },

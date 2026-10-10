@@ -1,8 +1,9 @@
 "use client";
 import { useState, useRef } from "react";
-import { Send, Save, Loader2, Code, Eye, Trash2, ChevronRight, PlayCircle, PauseCircle, CheckCircle2, Clock } from "lucide-react";
+import { Send, Save, Loader2, Code, Eye, Trash2, ChevronRight, PlayCircle, CheckCircle2, List } from "lucide-react";
 import { saveTemplate, deleteTemplate, createCampaign } from "./actions";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export function EmailerClient({ templates, campaigns = [] }: { templates: any[], campaigns?: any[] }) {
   const [subject, setSubject] = useState("");
@@ -40,46 +41,33 @@ export function EmailerClient({ templates, campaigns = [] }: { templates: any[],
       setStatus("success");
       setTimeout(() => setStatus("idle"), 3000);
       router.refresh();
+      router.push("/admin/emailer/queue"); // Auto-redirect to queue
     } catch (err) {
       setStatus("error");
     }
   };
+
+  const activeCount = campaigns.filter(c => c.status === "RUNNING").length;
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
       {/* LEFT: Campaigns & Templates */}
       <div className="xl:col-span-1 space-y-6">
         <div>
-          <h2 className="font-display font-semibold mb-4">Active Campaigns</h2>
-          {campaigns.length === 0 ? (
-            <p className="text-sm text-white/40">No campaigns yet.</p>
-          ) : (
-            <div className="space-y-3">
-              {campaigns.map(c => (
-                <div key={c.id} className="p-4 border border-white/10 rounded-xl bg-white/5">
-                  <div className="flex justify-between items-start mb-2">
-                    <p className="text-sm font-semibold truncate">{c.template.name}</p>
-                    <span className={	ext-[10px] uppercase px-2 py-0.5 rounded-full font-bold }>
-                      {c.status}
-                    </span>
-                  </div>
-                  
-                  {/* Progress bar */}
-                  <div className="w-full bg-black/50 rounded-full h-1.5 mb-2 overflow-hidden">
-                    <div 
-                      className="bg-white h-1.5 rounded-full transition-all duration-500" 
-                      style={{ width: \\%\ }}
-                    ></div>
-                  </div>
-                  
-                  <div className="flex justify-between text-xs text-white/50">
-                    <span>{c.sent} / {c.total} sent</span>
-                    {c.failed > 0 && <span className="text-red-400">{c.failed} failed</span>}
-                  </div>
-                </div>
-              ))}
+          <div className="p-6 border border-white/10 rounded-2xl bg-white/5 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 opacity-10">
+              <List className="w-16 h-16" />
             </div>
-          )}
+            <h2 className="font-display font-semibold mb-2">Campaign Queue</h2>
+            <p className="text-sm text-white/60 mb-6">You have {activeCount} campaign(s) actively sending right now.</p>
+            
+            <Link 
+              href="/admin/emailer/queue" 
+              className="inline-flex items-center justify-center gap-2 w-full border border-white/20 bg-white/5 text-white font-bold py-3 px-4 rounded-xl hover:bg-white/10 transition-colors text-sm text-center"
+            >
+              <span>View Queue Dashboard</span> <ChevronRight className="w-4 h-4 shrink-0" />
+            </Link>
+          </div>
         </div>
 
         <div>
@@ -87,9 +75,9 @@ export function EmailerClient({ templates, campaigns = [] }: { templates: any[],
           {templates.length === 0 ? (
             <p className="text-sm text-white/40">No saved templates yet.</p>
           ) : (
-            <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+            <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
               {templates.map((t) => (
-                <div key={t.id} className={\p-4 border \ rounded-xl hover:bg-white/10 transition-colors\}>
+                <div key={t.id} className={`p-4 border ${selectedTemplateId === t.id ? "border-white/50 bg-white/10" : "border-white/10 bg-white/5"} rounded-xl hover:bg-white/10 transition-colors`}>
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="text-sm font-semibold truncate">{t.name}</p>
@@ -106,7 +94,7 @@ export function EmailerClient({ templates, campaigns = [] }: { templates: any[],
                     onClick={() => loadTemplate(t)}
                     className="mt-3 w-full flex items-center justify-center gap-1 text-xs font-medium border border-white/10 rounded-lg py-2 hover:bg-white/20 transition-colors"
                   >
-                    Select Template <ChevronRight className="w-3 h-3" />
+                    Load & Use Template <ChevronRight className="w-3 h-3" />
                   </button>
                 </div>
               ))}
@@ -169,7 +157,7 @@ export function EmailerClient({ templates, campaigns = [] }: { templates: any[],
               onChange={(e) => setSubject(e.target.value)}
               required
               disabled={!!selectedTemplateId}
-              placeholder='e.g. Hey {{name}}, something exciting just shipped dYs?'
+              placeholder="e.g. Hey {{name}}, something exciting just shipped!"
               className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 focus:outline-none focus:border-white/30 transition-colors disabled:opacity-50"
             />
           </div>
@@ -179,10 +167,10 @@ export function EmailerClient({ templates, campaigns = [] }: { templates: any[],
             <div className="flex items-center justify-between mb-2">
               <label className="text-xs uppercase tracking-widest opacity-50">Email Template (HTML)</label>
               <div className="flex bg-white/5 border border-white/10 rounded-lg p-1">
-                <button type="button" onClick={() => setViewMode("code")} className={\lex items-center gap-2 px-4 py-1.5 rounded-md text-sm transition-colors \\}>
+                <button type="button" onClick={() => setViewMode("code")} className={`flex items-center gap-2 px-4 py-1.5 rounded-md text-sm transition-colors ${viewMode === "code" ? "bg-white/10 text-white" : "text-white/50 hover:text-white"}`}>
                   <Code className="w-4 h-4" /> Code
                 </button>
-                <button type="button" onClick={() => setViewMode("preview")} className={\lex items-center gap-2 px-4 py-1.5 rounded-md text-sm transition-colors \\}>
+                <button type="button" onClick={() => setViewMode("preview")} className={`flex items-center gap-2 px-4 py-1.5 rounded-md text-sm transition-colors ${viewMode === "preview" ? "bg-white/10 text-white" : "text-white/50 hover:text-white"}`}>
                   <Eye className="w-4 h-4" /> Preview
                 </button>
               </div>
@@ -241,7 +229,7 @@ export function EmailerClient({ templates, campaigns = [] }: { templates: any[],
             <span className="absolute inset-[-1000%] animate-[spin_2.5s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#000000_0%,#e5e7eb_50%,#000000_100%)]" />
             <span className="inline-flex h-full w-full items-center justify-center gap-2 rounded-full bg-black px-8 py-4 text-white backdrop-blur-3xl transition-colors hover:bg-white/10">
               {!selectedTemplateId 
-                ? "Select a Template First"
+                ? "Select a Template First to Enable Sending"
                 : status === "sending"
                 ? <><Loader2 className="w-4 h-4 animate-spin" /> Scheduling...</>
                 : status === "success"

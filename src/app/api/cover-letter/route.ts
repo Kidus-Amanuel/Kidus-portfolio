@@ -1,4 +1,5 @@
-import { streamWithKeyRotation } from '@/lib/ai-provider';
+import { streamText } from 'ai';
+import { google } from '@ai-sdk/google';
 
 export const maxDuration = 30;
 export const runtime = 'nodejs';
@@ -25,15 +26,19 @@ export async function POST(req: Request) {
   try {
     const { prompt } = await req.json();
 
-    const result = await streamWithKeyRotation({
-      modelName: 'gemini-2.0-flash',
+    if (!prompt) {
+      return new Response('Missing prompt', { status: 400 });
+    }
+
+    const result = await streamText({
+      model: google('gemini-1.5-flash'),
       system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: `Here is the Job Description:\n\n${prompt}` }],
+      prompt: `Here is the Job Description:\n\n${prompt}`,
       temperature: 0.7,
-      abortSignal: req.signal,
     });
 
-    return result.toDataStreamResponse();
+    // useCompletion (AI SDK v3) expects a plain text stream
+    return result.toTextStreamResponse();
   } catch (error) {
     console.error('Cover Letter AI Error:', error);
     return new Response('Error processing request', { status: 500 });

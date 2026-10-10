@@ -5,8 +5,13 @@ import { FileText, Copy, Loader2, Sparkles, Bot } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
 
 export default function CoverLetterBuilder() {
+  const [lengthType, setLengthType] = useState<"short" | "normal">("short");
+  
   const { completion, input, handleInputChange, handleSubmit, isLoading } =
-    useCompletion({ api: "/api/cover-letter" });
+    useCompletion({ 
+      api: "/api/cover-letter",
+      body: { length: lengthType }
+    });
   const [copied, setCopied] = useState(false);
   const outputRef = useRef<HTMLDivElement>(null);
 
@@ -35,7 +40,7 @@ export default function CoverLetterBuilder() {
           <FileText className="w-6 h-6" /> Cover Letter AI
         </h1>
         <p className="text-sm text-white/40">
-          Paste a job description — Gemini 1.5 Pro streams a tailored cover
+          Paste a job description — Gemini 2.5 Flash streams a tailored cover
           letter mapping your experience to the role.
         </p>
       </div>
@@ -93,7 +98,23 @@ export default function CoverLetterBuilder() {
               </div>
 
               {/* Submit bar */}
-              <div className="p-4 bg-black/50 backdrop-blur-md">
+              <div className="p-4 bg-black/50 backdrop-blur-md flex flex-col gap-4">
+                <div className="flex gap-2 justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setLengthType("short")}
+                    className={`text-xs px-4 py-2 rounded-full border transition-colors ${lengthType === 'short' ? 'bg-white text-black border-white' : 'bg-transparent text-white/50 border-white/20 hover:text-white hover:border-white/50'}`}
+                  >
+                    Short (~1000 chars)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setLengthType("normal")}
+                    className={`text-xs px-4 py-2 rounded-full border transition-colors ${lengthType === 'normal' ? 'bg-white text-black border-white' : 'bg-transparent text-white/50 border-white/20 hover:text-white hover:border-white/50'}`}
+                  >
+                    Normal (Detailed)
+                  </button>
+                </div>
                 <button
                   type="submit"
                   disabled={isLoading || !input}

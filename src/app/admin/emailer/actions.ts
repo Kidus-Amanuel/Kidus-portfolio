@@ -90,35 +90,24 @@ export async function getCampaignsWithStats() {
   });
 }
 
-// Triggered from the admin Queue page — runs on the server so CRON_SECRET stays private
+// Triggered from the admin Queue page — calls the processor directly (no HTTP fetch)
 export async function triggerCronNow(): Promise<{ ok: boolean; message: string }> {
   try {
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const cronSecret = process.env.CRON_SECRET;
-
-    const headers: Record<string, string> = { "Content-Type": "application/json" };
-    if (cronSecret) {
-      headers["Authorization"] = `Bearer ${cronSecret}`;
-    }
-
-    const res = await fetch(`${appUrl}/api/cron/process-emails`, {
-      method: "GET",
-      headers,
-      cache: "no-store",
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      return { ok: false, message: data?.error || `HTTP ${res.status}` };
-    }
+    const { processEmailBatches } = await import("@/lib/email-processor");
+    const result = await processEmailBatches();
 
     revalidatePath("/admin/emailer/queue");
+
+    if (result.message === "No campaigns to process right now.") {
+      return { ok: true, message: "No RUNNING campaigns due for processing right now. Check that your campaign is not paused." };
+    }
+
     return {
       ok: true,
-      message: `Batch sent! ${data.totalSentThisRun ?? 0} email(s) processed across ${data.processedCampaigns ?? 0} campaign(s).`,
+      message: `Batch sent! ${result.totalSentThisRun} email(s) processed across ${result.processedCampaigns} campaign(s).`,
     };
   } catch (err: any) {
-    return { ok: false, message: err?.message || "Unknown error" };
+    console.error("triggerCronNow failed:", err);
+    return { ok: false, message: err?.message || "Unknown error occurred." };
   }
 }

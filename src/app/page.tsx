@@ -10,6 +10,7 @@ import { Recommendations } from "@/components/sections/Recommendations";
 import { Contact } from "@/components/sections/Contact";
 import { AILab } from "@/components/sections/AILab";
 import { MoreAboutToggle } from "@/components/ui/MoreAboutToggle";
+import { Games } from "@/components/sections/Games";
 
 export default function Home() {
   return (
@@ -29,6 +30,7 @@ export default function Home() {
         <Skills />
         <Recommendations />
       </MoreAboutToggle>
+      <Games />
       <Contact />
       <Footer />
     </main>

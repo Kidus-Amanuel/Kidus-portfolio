@@ -1,7 +1,7 @@
-import { streamText } from 'ai';
-import { google } from '@ai-sdk/google';
+import { streamWithKeyRotation } from '@/lib/ai-provider';
 
 export const maxDuration = 30;
+export const runtime = 'nodejs';
 
 const SYSTEM_PROMPT = `You are an expert career coach writing a cover letter for Kidus Amanuel.
 
@@ -25,16 +25,17 @@ export async function POST(req: Request) {
   try {
     const { prompt } = await req.json();
 
-    const result = await streamText({
-      model: google('gemini-1.5-pro-latest'), // Using Pro for deeper reasoning and better writing
+    const result = await streamWithKeyRotation({
+      modelName: 'gemini-1.5-pro-latest',
       system: SYSTEM_PROMPT,
-      prompt: `Here is the Job Description:\n\n${prompt}`,
-      temperature: 0.7, 
+      messages: [{ role: 'user', content: `Here is the Job Description:\n\n${prompt}` }],
+      temperature: 0.7,
+      abortSignal: req.signal,
     });
 
     return result.toDataStreamResponse();
   } catch (error) {
-    console.error("Cover Letter AI Error:", error);
+    console.error('Cover Letter AI Error:', error);
     return new Response('Error processing request', { status: 500 });
   }
 }

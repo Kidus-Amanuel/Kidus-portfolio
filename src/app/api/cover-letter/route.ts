@@ -1,5 +1,4 @@
-import { streamText } from 'ai';
-import { google } from '@ai-sdk/google';
+import { streamWithKeyRotation } from '@/lib/ai-provider';
 
 export const maxDuration = 30;
 export const runtime = 'nodejs';
@@ -15,11 +14,11 @@ KIDUS'S BACKGROUND:
 
 INSTRUCTIONS:
 1. The user will provide a Job Description.
-2. Write a highly tailored, professional, and concise cover letter from Kidus's perspective applying for this exact job.
-3. Highlight the specific skills from Kidus's background that match the JD.
+2. Write a highly tailored, professional, and VERY CONCISE cover letter from Kidus's perspective applying for this exact job.
+3. Highlight the specific skills from Kidus's background that match the JD. Get straight to the point on why he is a fit.
 4. DO NOT invent fake companies, fake metrics, or fake experiences. Stick strictly to his actual background.
-5. Keep it under 300 words. Be confident, engaging, and modern.
-6. Format with clear paragraphs and line breaks.
+5. STRICT LENGTH LIMIT: Keep the entire response under 1000 characters (around 150 words). No fluff, no long introductions.
+6. Format with clear, short paragraphs and line breaks.
 7. Do not wrap the response in markdown code blocks. Just return the raw text.`;
 
 export async function POST(req: Request) {
@@ -30,15 +29,15 @@ export async function POST(req: Request) {
       return new Response('Missing prompt', { status: 400 });
     }
 
-    const result = await streamText({
-      model: google('gemini-1.5-flash'),
+    const result = await streamWithKeyRotation({
+      modelName: 'gemini-2.5-flash',
       system: SYSTEM_PROMPT,
-      prompt: `Here is the Job Description:\n\n${prompt}`,
+      messages: [{ role: 'user', content: `Here is the Job Description:\n\n${prompt}` }],
       temperature: 0.7,
+      abortSignal: req.signal,
     });
 
-    // useCompletion (AI SDK v3) expects toAIStreamResponse
-    return result.toAIStreamResponse();
+    return result.toDataStreamResponse();
   } catch (error) {
     console.error('Cover Letter AI Error:', error);
     return new Response('Error processing request', { status: 500 });

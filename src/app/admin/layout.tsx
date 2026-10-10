@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { LayoutDashboard, Mail, MessageSquare, Users, Send, Database } from "lucide-react";
+import { LayoutDashboard, Mail, MessageSquare, Users, Send, Database, FileText } from "lucide-react";
 
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Content Manager", href: "/admin/content", icon: Database },
+  { label: "Cover Letter AI", href: "/admin/cover-letter", icon: FileText },
   { label: "Mass Emailer", href: "/admin/emailer", icon: Mail },
   { label: "Contacts", href: "/admin/contacts", icon: MessageSquare },
   { label: "Subscribers", href: "/admin/subscribers", icon: Users },

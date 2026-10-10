@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Kidus Amanuel | Full-Stack AI Engineer",
     description: "Full-stack engineer who ships SaaS products fast, now building AI-powered systems.",
-    url: 'https://kidus.dev',
+    url: 'https://kidus-portfolio-gray.vercel.app/',
     siteName: 'Kidus Amanuel',
     locale: 'en_US',
     type: 'website',

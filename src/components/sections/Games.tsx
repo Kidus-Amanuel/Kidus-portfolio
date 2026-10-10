@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Gamepad2, Sparkles, ArrowUpRight } from "lucide-react";
+import { Gamepad2, ArrowUpRight } from "lucide-react";
 
 type Game = {
   title: string;
@@ -21,15 +21,6 @@ const games: Game[] = [
     link: "/lab/invite/new",
     icon: Gamepad2,
     badge: "Most Fun",
-  },
-  {
-    title: "AI Cover Letter Builder",
-    description:
-      "Paste a job description and watch Gemini 1.5 Pro stream a tailored cover letter that matches your experience in real time.",
-    tags: ["AI", "Gemini 1.5", "Vercel AI SDK"],
-    link: "/lab/cover-letter",
-    icon: Sparkles,
-    badge: "Most Useful",
   },
 ];
 

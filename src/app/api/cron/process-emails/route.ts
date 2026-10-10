@@ -6,10 +6,12 @@ export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
   try {
-    const authHeader = req.headers.get("authorization");
     const cronSecret = process.env.CRON_SECRET;
-    if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-      return new NextResponse("Unauthorized", { status: 401 });
+    if (cronSecret) {
+      const authHeader = req.headers.get("authorization");
+      if (authHeader !== `Bearer ${cronSecret}`) {
+        return new NextResponse("Unauthorized", { status: 401 });
+      }
     }
 
     const result = await processEmailBatches();

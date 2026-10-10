@@ -1,11 +1,5 @@
 {
   "buildCommand": "next build",
   "outputDirectory": ".next",
-  "framework": "nextjs",
-  "crons": [
-    {
-      "path": "/api/cron/process-emails",
-      "schedule": "*/5 * * * *"
-    }
-  ]
+  "framework": "nextjs"
 }

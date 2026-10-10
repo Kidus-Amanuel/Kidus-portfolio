@@ -1,0 +1,26 @@
+name: Email Queue Processor
+
+on:
+  schedule:
+    # Runs every 5 minutes — free on GitHub Actions
+    - cron: "*/5 * * * *"
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  process-emails:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - name: Trigger email batch worker
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X GET "${{ secrets.APP_URL }}/api/cron/process-emails" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json")
+          echo "HTTP Status: $response"
+          if [ "$response" -lt 200 ] || [ "$response" -ge 300 ]; then
+            echo "Cron request failed with status $response"
+            exit 1
+          fi
+          echo "Cron triggered successfully."

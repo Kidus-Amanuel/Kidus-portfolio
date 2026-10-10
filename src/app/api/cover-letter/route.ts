@@ -37,8 +37,8 @@ export async function POST(req: Request) {
       temperature: 0.7,
     });
 
-    // useCompletion (AI SDK v3) expects a plain text stream
-    return result.toTextStreamResponse();
+    // useCompletion (AI SDK v3) expects toAIStreamResponse
+    return result.toAIStreamResponse();
   } catch (error) {
     console.error('Cover Letter AI Error:', error);
     return new Response('Error processing request', { status: 500 });

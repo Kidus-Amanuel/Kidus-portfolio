@@ -8,30 +8,20 @@ const recentBundles: string[] = [];
 const MAX_RECENT = 8;
 
 const FALLBACK_REASONS = [
-  "I will be a better person because of this. Probably. Possibly. Ask me in a week.",
-  "You were probably going to do something less interesting instead. Be honest.",
-  "Think of this as an investment. The investment is me. The returns are currently unavailable. Trust the process.",
+  "Scientifically proven to boost your good karma and strengthen your Wi-Fi signal.",
+  "If you say no, I will be forced to take up the bagpipes out of pure boredom.",
+  "I will personally give you a standing ovation every time you walk into a room.",
 ];
 
-const COMEDY_SYSTEM_PROMPT = `You are the comedy writer for a ridiculous interactive website called Yes-Only.
-
-The sender wants a friend to agree to a specific request. You will be given the request (the "reason"). Generate THREE short, funny reasons that make the friend want to say yes — each one tied to that specific reason.
-
-Rules:
-- Output EXACTLY 3 reasons as a JSON array of strings, nothing else.
-- Each reason: 1 to 3 sentences. No more.
-- Each reason must feel different — different angle, different joke structure.
-- Self-aware, slightly absurd, clever, friendly. Internet-native humor.
-- Tie each joke back to the reason the sender gave whenever it helps.
-- DO NOT be offensive, political, insulting, or make serious claims.
-- Avoid repeating previous reasons.
-- Make them feel like something a clever friend would say, not a corporate joke.
-
-Example output:
-["reason one text", "reason two text", "reason three text"]`;
+const COMEDIC_ANGLES = [
+  "Absurd future history / ancient prophecy",
+  "Fake science / karma / cosmic alignment",
+  "Overdramatic, petty consequence if they refuse",
+  "Ridiculous personal sacrifice or bribe",
+  "Unexpected animal or inanimate object approval",
+];
 
 function pickFallbackBundle(): string[] {
-  // Slightly randomize the fallback order so it doesn't feel canned
   const arr = [...FALLBACK_REASONS];
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -41,7 +31,7 @@ function pickFallbackBundle(): string[] {
 }
 
 function safeParseBundle(text: string): string[] | null {
-  // Strip markdown fences if Gemini wraps the JSON
+  // Strip markdown code fences if Gemini wraps output
   const cleaned = text
     .trim()
     .replace(/^```(?:json)?/i, "")
@@ -50,17 +40,19 @@ function safeParseBundle(text: string): string[] | null {
 
   try {
     const parsed = JSON.parse(cleaned);
+    // Support both {"reasons": ["..."]} and ["..."]
+    const list = Array.isArray(parsed) ? parsed : parsed?.reasons;
+
     if (
-      Array.isArray(parsed) &&
-      parsed.length >= 3 &&
-      parsed.every((r) => typeof r === "string") &&
-      parsed.every((r) => r.length > 0 && r.length <= 500)
+      Array.isArray(list) &&
+      list.length >= 3 &&
+      list.every((r) => typeof r === "string") &&
+      list.every((r) => r.trim().length > 0)
     ) {
-      // Trim to first 3 just in case
-      return parsed.slice(0, 3).map((s) => s.trim());
+      return list.slice(0, 3).map((s) => s.trim());
     }
-  } catch {
-    // Fall through to null
+  } catch (err) {
+    console.warn("[/api/generate-joke] JSON parse error:", err);
   }
   return null;
 }
@@ -81,7 +73,7 @@ export async function POST(req: Request) {
     const reason = rawReason.slice(0, 200);
     const normalized = normalizeQuestion(reason);
 
-    // 1) Check the DB cache first
+    // 1) Check DB cache first
     try {
       const cached = await prisma.question.findUnique({
         where: { normalized },
@@ -91,11 +83,9 @@ export async function POST(req: Request) {
       });
 
       if (cached && cached.answers.length > 0) {
-        // Newest answer first — it stores reasons as JSON
         for (const ans of cached.answers) {
           const parsed = safeParseBundle(ans.content);
           if (parsed) {
-            // Fire-and-forget usage bump on the matching answer
             prisma.answer
               .update({
                 where: { id: ans.id },
@@ -114,31 +104,40 @@ export async function POST(req: Request) {
       console.error("[/api/generate-joke] cache lookup failed:", dbErr);
     }
 
-    // 2) Cache miss → ask Gemini for a 3-reason bundle
+    // 2) Cache miss → Run AI comedy generator
     let bundle: string[] = [];
     try {
-      const previousBlock =
+      const avoidList =
         recentBundles.length > 0
-          ? `\n\nRecent reason sets to avoid repeating:\n${recentBundles
-              .slice(-3)
-              .map((b, i) => `Set ${i + 1}:\n${b}`)
-              .join("\n\n")}`
-          : "";
+          ? recentBundles.slice(-4).join("\n- ")
+          : FALLBACK_REASONS.join("\n- ");
 
-      const contextBlock = extraContext
-        ? `\n\nExtra context (use only if it helps): ${extraContext}`
-        : "";
+      const systemPrompt = `You write short, funny, over-the-top reasons why a friend should say YES to a request.
+Tone: playful, friendly, harmless. Avoid dating drama, money pressure, insults, and politics.
 
-      const userPrompt = `The sender's request is: "${reason}"
+Return ONLY valid JSON, no markdown, no preamble:
+{"reasons": ["...", "..."]}
 
-Generate 3 short funny reasons the friend should say yes — each tied to this request, all different from each other.${previousBlock}${contextBlock}`;
+Rules:
+- Generate exactly 3 reasons.
+- Each reason is MAX 90 characters.
+- Every reason must use a DIFFERENT comedic angle. Use these angles:
+  ${COMEDIC_ANGLES.join("\n  ")}
+- No two reasons may start with the same word or share a sentence structure.
+- Be specific and absurd, not generic. Concrete details beat vague hype.
+- Avoid these (already used), and don't write anything similar:
+- ${avoidList}`;
+
+      const userPrompt = `The friend's request is: "${reason}"${
+        extraContext ? `\nContext: ${extraContext}` : ""
+      }\nGenerate 3 short, punchy reasons (under 90 chars each).`;
 
       const result = await generateText({
         model: google("gemini-1.5-pro-latest"),
-        system: COMEDY_SYSTEM_PROMPT,
+        system: systemPrompt,
         prompt: userPrompt,
-        temperature: 1.2,
-        maxTokens: 500,
+        temperature: 1.1,
+        maxTokens: 400,
       });
 
       const parsed = safeParseBundle(result.text);
@@ -148,7 +147,7 @@ Generate 3 short funny reasons the friend should say yes — each tied to this r
       bundle = pickFallbackBundle();
     }
 
-    // 3) Persist the bundle as JSON in the Answer table
+    // 3) Persist bundle into DB Answer cache
     try {
       const dbQuestion = await prisma.question.upsert({
         where: { normalized },
@@ -159,7 +158,7 @@ Generate 3 short funny reasons the friend should say yes — each tied to this r
       await prisma.answer.create({
         data: {
           questionId: dbQuestion.id,
-          content: JSON.stringify(bundle),
+          content: JSON.stringify({ reasons: bundle }),
         },
       });
     } catch (dbErr) {

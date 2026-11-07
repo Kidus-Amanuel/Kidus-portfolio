@@ -15,9 +15,9 @@ const GameScene = dynamic(
 
 // Fallback reasons used for slides #2 and #3 if the AI call fails
 const FALLBACK_REASONS = [
-  "I will be a better person because of this. Probably. Possibly. Ask me in a week.",
-  "You were probably going to do something less interesting instead. Be honest.",
-  "Think of this as an investment. The investment is me. The returns are currently unavailable. Trust the process.",
+  "Scientifically proven to boost your good karma and strengthen your Wi-Fi signal.",
+  "If you say no, I will be forced to take up the bagpipes out of pure boredom.",
+  "I will personally give you a standing ovation every time you walk into a room.",
 ];
 
 // Shown when the user keeps clicking NO during the YES/NO round

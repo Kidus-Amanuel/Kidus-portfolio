@@ -60,6 +60,13 @@ export function Contact({ settings }: { settings: any }) {
               </form>
             )}
             
+            <a
+              href="/book"
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto border border-white/20 px-8 py-4 rounded-full text-sm hover:bg-white/10 transition-colors"
+            >
+              Book a meeting
+            </a>
+
             <div className="space-y-10 md:pl-12">
               <div>
                 <h3 className="text-xs font-medium opacity-50 uppercase tracking-widest mb-4">Connect</h3>

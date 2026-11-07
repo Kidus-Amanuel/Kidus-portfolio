@@ -44,6 +44,7 @@ export function Navbar() {
     { name: "Experience", href: "#experience" },
     { name: "Work", href: "#work" },
     { name: "Skills", href: "#skills" },
+    { name: "Book", href: "/book" },
     { name: "Contact", href: "#contact" },
   ];
 
@@ -138,13 +139,13 @@ export function Navbar() {
             {/* Bottom Actions inside Mobile Menu */}
             <div className="flex flex-col gap-3 pt-6 border-t border-white/10">
               <a
-                href="#contact"
+                href="/book"
                 onClick={handleLinkClick}
                 className="w-full group relative inline-flex h-13 items-center justify-center overflow-hidden rounded-full p-[1px] font-medium"
               >
                 <span className="absolute inset-[-1000%] animate-[spin_2.5s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#000000_0%,#e5e7eb_50%,#000000_100%)]" />
                 <span className="inline-flex h-full w-full items-center justify-center rounded-full bg-black px-6 py-3.5 text-white backdrop-blur-3xl text-sm font-semibold">
-                  Book a call / Contact
+                  Book a call
                 </span>
               </a>
 

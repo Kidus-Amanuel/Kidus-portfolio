@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LayoutDashboard, Mail, MessageSquare, Users, Send, Database, FileText, Settings } from "lucide-react";
+import { LayoutDashboard, Mail, MessageSquare, Users, Send, Database, FileText, Settings, CalendarClock, Plug } from "lucide-react";
 
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -10,6 +10,8 @@ const navItems = [
   { label: "Contacts", href: "/admin/contacts", icon: MessageSquare },
   { label: "Subscribers", href: "/admin/subscribers", icon: Users },
   { label: "Invite Responses", href: "/admin/invites", icon: Send },
+  { label: "Bookings", href: "/admin/bookings", icon: CalendarClock },
+  { label: "Integrations", href: "/admin/integrations", icon: Plug },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

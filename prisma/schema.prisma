@@ -158,3 +158,51 @@ model EmailDelivery {
   @@unique([subscriberId, templateId])
   @@index([campaignId, status])
 }
+
+// ==========================================
+// MEETING BOOKING SYSTEM
+// ==========================================
+
+model Booking {
+  id               String   @id @default(cuid())
+  requesterName    String
+  requesterEmail   String
+  requesterPhone   String?
+  requesterCompany String?
+  requesterTimezone String  @default("Africa/Nairobi")
+  topic            String
+  notes            String?  @db.Text
+  durationMinutes  Int      @default(30)
+  /// Instant the visitor proposed (never changes).
+  proposedAt       DateTime
+  /// Instant the meeting is actually booked for (may be moved by the host).
+  startsAt         DateTime
+  endsAt           DateTime
+  /// PENDING | ACCEPTED | DECLINED | CANCELLED
+  status           String   @default("PENDING")
+  /// GOOGLE_MEET | ZOOM | WHATSAPP | TELEGRAM
+  platform         String   @default("GOOGLE_MEET")
+  meetingUrl       String?
+  meetingId        String?
+  /// Host-only join URL (Zoom start_url).
+  hostUrl          String?
+  meetingPassword  String?
+  calendarEventId  String?
+  calendarHtmlLink String?
+  /// Human-readable note about a partial failure (e.g. calendar auth missing).
+  failureReason    String?  @db.Text
+  decidedAt        DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([status, proposedAt])
+  @@index([requesterEmail])
+}
+
+// Key/value store for runtime-configurable integration credentials.
+// Environment variables always win over rows in this table.
+model AppSetting {
+  key       String   @id
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+}

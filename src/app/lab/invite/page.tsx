@@ -185,35 +185,10 @@ function InviteContent() {
           initial={{ scale: 0.5, opacity: 0, rotate: -5 }}
           animate={{ scale: 1, opacity: 1, rotate: -2 }}
           transition={{ type: "spring", duration: 0.8 }}
-          className="text-5xl md:text-8xl font-display font-black mb-6 text-white drop-shadow-2xl"
+          className="text-5xl md:text-8xl font-display font-black text-white drop-shadow-2xl"
         >
-          I KNEW YOU&apos;D SAY YES. 🎉
+          I KNEW YOU&apos;D SAY YES.
         </motion.h1>
-        <motion.p
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="text-xl md:text-2xl text-white/80 max-w-xl font-medium"
-        >
-          Thank you for your contribution to my future empire.
-        </motion.p>
-        <motion.p
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="text-base text-white/50 mt-3 italic"
-        >
-          (Just kidding. But also not.) 😂
-        </motion.p>
-        <motion.button
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.7 }}
-          onClick={() => window.location.reload()}
-          className="mt-10 bg-white/95 text-violet-700 px-8 py-3 rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-2xl"
-        >
-          Start Again 🔁
-        </motion.button>
       </div>
     );
   }

@@ -50,6 +50,7 @@ export default function LinkGenerator() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           reason: question,
+          fresh: true,
           context:
             "Year 2026. Lighthearted, friendly tone. Convince a friend to help with the request above.",
         }),

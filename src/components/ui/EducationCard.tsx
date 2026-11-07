@@ -8,7 +8,7 @@ export function EducationCard({ edu, index }: { edu: any; index: number }) {
       whileInView={{ opacity: 1, y: 0 }} 
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
-      className="p-8 border border-white/10 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors"
+      className="p-6 sm:p-8 border border-white/10 rounded-xl sm:rounded-2xl bg-white/5 hover:bg-white/10 transition-colors"
     >
       <h3 className="text-xl font-bold mb-2">{edu.degree}</h3>
       <p className="text-mutedForeground mb-4">{edu.school}</p>

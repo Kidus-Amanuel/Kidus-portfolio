@@ -71,16 +71,16 @@ export function MoreAboutToggle({
         <div className="absolute right-0 top-1/2 -translate-y-1/2 h-px w-[40%] animate-flow-left bg-gradient-to-r from-transparent via-white/70 to-transparent" />
 
         {/* Button centered on top of the flow line */}
-        <div className="relative flex justify-center px-6 py-6 md:py-8">
+        <div className="relative flex justify-center px-4 sm:px-6 py-6 md:py-8">
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}
             aria-expanded={open}
             aria-controls="more-about-kidus-content"
-            className="group relative inline-flex h-14 items-center justify-center overflow-hidden rounded-full p-[1px] font-medium focus:outline-none w-full sm:w-auto sm:min-w-[320px] md:min-w-[420px]"
+            className="group relative inline-flex h-12 sm:h-14 items-center justify-center overflow-hidden rounded-full p-[1px] font-medium focus:outline-none w-full sm:w-auto sm:min-w-[320px] md:min-w-[420px]"
           >
             <span className="absolute inset-[-1000%] animate-[spin_2.5s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#000000_0%,#e5e7eb_50%,#000000_100%)]" />
-            <span className="inline-flex h-full w-full items-center justify-center gap-2 rounded-full bg-black px-10 md:px-20 py-4 text-white backdrop-blur-3xl transition-colors hover:bg-white/10 text-base whitespace-nowrap">
+            <span className="inline-flex h-full w-full items-center justify-center gap-2 rounded-full bg-black px-6 sm:px-10 md:px-20 py-3 sm:py-4 text-white backdrop-blur-3xl transition-colors hover:bg-white/10 text-sm sm:text-base whitespace-nowrap">
               {open ? collapseLabel : label}
             </span>
           </button>

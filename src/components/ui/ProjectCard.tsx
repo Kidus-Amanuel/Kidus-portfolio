@@ -9,7 +9,7 @@ export function ProjectCard({ project, index }: { project: any; index: number })
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
-      className="group relative flex flex-col justify-between p-8 md:p-12 border border-white/10 rounded-3xl bg-white/[0.02] hover:bg-white/[0.04] transition-colors aspect-square md:aspect-auto md:min-h-[500px]"
+      className="group relative flex flex-col justify-between p-6 sm:p-8 md:p-12 border border-white/10 rounded-2xl sm:rounded-3xl bg-white/[0.02] hover:bg-white/[0.04] transition-colors min-h-[320px] sm:min-h-[380px] md:min-h-[500px]"
     >
       <div>
         <p className="text-xs font-medium uppercase tracking-widest opacity-50 mb-4">{project.category}</p>

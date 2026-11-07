@@ -37,7 +37,7 @@ function Particles() {
 
 export function ThreeBackground() {
   return (
-    <div className="w-full h-full opacity-60">
+    <div className="w-full h-full opacity-60 pointer-events-none">
       <Canvas camera={{ position: [0, 0, 5] }}>
         <Particles />
       </Canvas>

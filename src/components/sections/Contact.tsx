@@ -20,15 +20,15 @@ export function Contact({ settings }: { settings: any }) {
   };
 
   return (
-    <section id="contact" className="py-32 px-6 md:px-12 lg:px-24 bg-black border-t border-white/10 relative z-10">
+    <section id="contact" className="py-16 sm:py-24 md:py-32 px-5 sm:px-6 md:px-12 lg:px-24 bg-black border-t border-white/10 relative z-10">
       <div className="max-w-4xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }}>
-          <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">Let's build something.</h2>
-          <p className="text-mutedForeground mb-12 max-w-xl text-lg">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold mb-4 sm:mb-6">Let's build something.</h2>
+          <p className="text-mutedForeground mb-8 sm:mb-12 max-w-xl text-base sm:text-lg">
             Currently open for remote roles, freelance projects, and talking about AI. Drop your details and I'll get back to you within 24 hours.
           </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
             {status === "success" ? (
               <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center justify-center p-8 border border-white/20 rounded-3xl bg-white/5 text-center h-full min-h-[300px]">
                 <div className="w-16 h-16 rounded-full bg-white text-black flex items-center justify-center mb-6">

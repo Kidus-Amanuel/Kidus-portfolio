@@ -6,9 +6,9 @@ export async function Footer() {
   });
 
   return (
-    <footer className="py-8 px-6 md:px-12 border-t border-white/10 bg-black text-white/50 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
+    <footer className="py-8 px-5 sm:px-6 md:px-12 border-t border-white/10 bg-black text-white/50 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-center md:text-left">
       <p>© {new Date().getFullYear()} Kidus. All rights reserved.</p>
-      <div className="flex items-center gap-6">
+      <div className="flex flex-wrap items-center justify-center gap-5 sm:gap-6">
         {settings?.githubUrl && (
           <a href={settings.githubUrl} target="_blank" rel="noreferrer" className="hover:text-white transition-colors">GitHub</a>
         )}

@@ -28,7 +28,7 @@ export function Games() {
   return (
     <section
       id="games"
-      className="py-8 md:py-12 px-6 md:px-12 lg:px-24 bg-black border-t border-white/10 relative z-10"
+      className="py-8 md:py-12 px-5 sm:px-6 md:px-12 lg:px-24 bg-black border-t border-white/10 relative z-10"
     >
       <div className="max-w-6xl mx-auto">
         <div className="flex items-end justify-between mb-8">
@@ -48,7 +48,7 @@ export function Games() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group relative flex flex-col justify-between p-8 md:p-12 border border-white/10 rounded-3xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors aspect-square md:aspect-auto md:min-h-[420px]"
+                className="group relative flex flex-col justify-between p-6 sm:p-8 md:p-12 border border-white/10 rounded-2xl sm:rounded-3xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors min-h-[320px] sm:min-h-[380px] md:min-h-[420px]"
               >
                 <div>
                   <div className="flex items-center justify-between mb-6">

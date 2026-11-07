@@ -37,10 +37,10 @@ export async function Projects() {
   const displayProjects = dbProjects.length > 0 ? dbProjects : hardcodedProjects;
 
   return (
-    <section id="work" className="py-8 md:py-12 px-6 md:px-12 lg:px-24 bg-black border-t border-white/10">
+    <section id="work" className="py-8 md:py-12 px-5 sm:px-6 md:px-12 lg:px-24 bg-black border-t border-white/10">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-sm font-medium opacity-50 uppercase tracking-widest mb-12">Featured Work</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <h2 className="text-sm font-medium opacity-50 uppercase tracking-widest mb-8 sm:mb-12">Featured Work</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
           {displayProjects.map((project, i) => (
             <ProjectCard key={project.id || i} project={project} index={i} />
           ))}

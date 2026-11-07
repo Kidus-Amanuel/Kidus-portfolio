@@ -13,12 +13,12 @@ export async function Certificates() {
   if (certificates.length === 0) return null;
 
   return (
-    <section id="certificates" className="py-8 md:py-12 px-6 md:px-12 lg:px-24 bg-black border-t border-white/10 relative z-10">
+    <section id="certificates" className="py-8 md:py-12 px-5 sm:px-6 md:px-12 lg:px-24 bg-black border-t border-white/10 relative z-10">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-sm font-medium opacity-50 uppercase tracking-widest mb-12">Certifications & Awards</h2>
+        <h2 className="text-sm font-medium opacity-50 uppercase tracking-widest mb-8 sm:mb-12">Certifications & Awards</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {certificates.map(c => (
-            <div key={c.id} className="p-8 border border-white/10 rounded-3xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors flex flex-col justify-between min-h-[200px]">
+            <div key={c.id} className="p-6 sm:p-8 border border-white/10 rounded-2xl sm:rounded-3xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors flex flex-col justify-between min-h-[180px] sm:min-h-[200px]">
               <div>
                 <Award className="w-8 h-8 text-white/30 mb-6" />
                 <h3 className="font-bold text-xl mb-2">{c.name}</h3>

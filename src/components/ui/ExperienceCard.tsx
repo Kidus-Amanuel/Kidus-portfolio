@@ -11,19 +11,19 @@ export function ExperienceCard({ exp, index }: { exp: any; index: number }) {
       whileInView={{ opacity: 1, y: 0 }} 
       viewport={{ once: true }} 
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="relative pl-8 md:pl-0"
+      className="relative pl-6 sm:pl-8 md:pl-0"
     >
       <div className="md:grid md:grid-cols-4 md:gap-8 items-baseline">
-        <div className="mb-2 md:mb-0 text-sm opacity-50 font-medium tracking-wide">
+        <div className="mb-2 md:mb-0 text-xs sm:text-sm opacity-50 font-medium tracking-wide">
           {exp.startDate} — {exp.endDate}
         </div>
-        <div className="md:col-span-3 border-l md:border-l-0 border-white/10 pl-6 md:pl-0 pb-12 relative">
+        <div className="md:col-span-3 border-l md:border-l-0 border-white/10 pl-4 sm:pl-6 md:pl-0 pb-8 sm:pb-12 relative">
           <div className="absolute left-[-5px] md:hidden top-2 w-2 h-2 rounded-full bg-white" />
-          <h3 className="text-2xl font-display font-bold mb-1">{exp.role}</h3>
-          <h4 className="text-lg opacity-70 mb-6">{exp.company}</h4>
-          <ul className="space-y-3">
+          <h3 className="text-xl sm:text-2xl font-display font-bold mb-1">{exp.role}</h3>
+          <h4 className="text-base sm:text-lg opacity-70 mb-4 sm:mb-6">{exp.company}</h4>
+          <ul className="space-y-2.5 sm:space-y-3">
             {impacts.map((impact: string, j: number) => (
-              <li key={j} className="text-mutedForeground flex items-start">
+              <li key={j} className="text-mutedForeground flex items-start text-sm sm:text-base">
                 <span className="mr-3 text-white/30 mt-1">▹</span>
                 <span className="leading-relaxed">{impact}</span>
               </li>

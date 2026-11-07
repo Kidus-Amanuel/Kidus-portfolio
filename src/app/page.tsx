@@ -21,8 +21,8 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-black text-white selection:bg-white selection:text-black">
       <Hero />
-      <section className="px-6 md:px-12 lg:px-24 py-12 md:py-16 bg-black border-t border-white/10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
+      <section className="px-5 sm:px-6 md:px-12 lg:px-24 py-10 md:py-16 bg-black border-t border-white/10">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-stretch">
           <AboutMe />
           <AILab />
         </div>

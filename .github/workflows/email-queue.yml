@@ -2,9 +2,8 @@ name: Email Queue Processor
 
 on:
   schedule:
-    # Runs 2 times per day: 10:00 AM UTC and 10:00 PM UTC
-    # You can edit the hours "10,22" to whichever times you prefer!
-    - cron: "0 10,22 * * *"
+    # Testing schedule: Runs every 7 minutes
+    - cron: "*/7 * * * *"
   workflow_dispatch: # Allows manual one-click trigger from GitHub Actions tab for instant testing
 
 jobs:

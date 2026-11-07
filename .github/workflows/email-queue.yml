@@ -2,25 +2,57 @@ name: Email Queue Processor
 
 on:
   schedule:
-    # Runs every 5 minutes — free on GitHub Actions
-    - cron: "*/5 * * * *"
-  workflow_dispatch: # Allow manual trigger from GitHub UI
+    # Runs 2 times per day: 10:00 AM UTC and 10:00 PM UTC
+    # You can edit the hours "10,22" to whichever times you prefer!
+    - cron: "0 10,22 * * *"
+  workflow_dispatch: # Allows manual one-click trigger from GitHub Actions tab for instant testing
 
 jobs:
   process-emails:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 5
 
     steps:
       - name: Trigger email batch worker
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" \
-            -X GET "${{ secrets.APP_URL }}/api/cron/process-emails" \
+          # Use APP_URL secret if defined, otherwise fall back to production Vercel URL
+          APP_URL="${{ secrets.APP_URL }}"
+          if [ -z "$APP_URL" ]; then
+            APP_URL="https://kidus-portfolio-gray.vercel.app"
+          fi
+
+          ENDPOINT="$APP_URL/api/cron/process-emails"
+
+          echo "=========================================================="
+          echo "🚀 Triggering Email Batch Processor"
+          echo "🌐 Target Endpoint: $ENDPOINT"
+          echo "🕒 Current Time (UTC): $(date -u)"
+          echo "=========================================================="
+
+          # Call the cron API endpoint and capture both HTTP status and response body
+          RESPONSE_FILE=$(mktemp)
+          HTTP_CODE=$(curl -s -w "%{http_code}" -o "$RESPONSE_FILE" \
+            -X GET "$ENDPOINT" \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "User-Agent: GitHub-Actions-Cron" \
             -H "Content-Type: application/json")
-          echo "HTTP Status: $response"
-          if [ "$response" -lt 200 ] || [ "$response" -ge 300 ]; then
-            echo "Cron request failed with status $response"
+
+          echo ""
+          echo "📊 HTTP Status Code: $HTTP_CODE"
+          echo "📝 Response Body:"
+          cat "$RESPONSE_FILE"
+          echo ""
+          echo "=========================================================="
+
+          # Check HTTP status
+          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+            echo "✅ SUCCESS: Email queue processed successfully."
+          elif [ "$HTTP_CODE" -eq 401 ]; then
+            echo "❌ AUTHENTICATION ERROR (401 Unauthorized):"
+            echo "The CRON_SECRET configured in GitHub Secrets does not match the CRON_SECRET in Vercel Environment Variables."
+            echo "Make sure the secret value is identical in both places."
+            exit 1
+          else
+            echo "❌ FAILURE: Cron endpoint returned HTTP $HTTP_CODE."
             exit 1
           fi
-          echo "Cron triggered successfully."

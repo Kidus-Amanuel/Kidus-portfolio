@@ -2,9 +2,10 @@ name: Email Queue Processor
 
 on:
   schedule:
-    # Testing schedule: Runs every 7 minutes
-    - cron: "*/7 * * * *"
-  workflow_dispatch: # Allows manual one-click trigger from GitHub Actions tab for instant testing
+    # Production schedule: 11:00 AM and 3:00 PM Ethiopian Time (EAT / UTC+3)
+    # 11:00 AM EAT = 08:00 UTC | 3:00 PM EAT = 12:00 UTC
+    - cron: "0 8,12 * * *"
+  workflow_dispatch: # Allows manual one-click trigger from GitHub Actions tab whenever needed
 
 jobs:
   process-emails:
@@ -23,7 +24,7 @@ jobs:
           ENDPOINT="$APP_URL/api/cron/process-emails"
 
           echo "=========================================================="
-          echo "🚀 Triggering Email Batch Processor"
+          echo "🚀 Triggering Email Batch Processor (Production)"
           echo "🌐 Target Endpoint: $ENDPOINT"
           echo "🕒 Current Time (UTC): $(date -u)"
           echo "=========================================================="

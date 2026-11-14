@@ -70,14 +70,15 @@ export function registerFonts() {
 
 export const theme = {
   colors: {
-    primary: "#0f172a", // Charcoal black
-    secondary: "#334155", // Slate gray
-    muted: "#64748b", // Light muted slate
-    accent: "#1e3a8a", // Refined dark navy accent
-    border: "#cbd5e1", // Hairline border
-    borderLight: "#e2e8f0",
+    primary: "#0f172a", // Charcoal slate (almost black, softer than #000)
+    secondary: "#334155", // Slate 700 for readable secondary text
+    muted: "#64748b", // Slate 500 for metadata & dates
+    accent: "#1e3a8a", // Refined deep navy
+    subtle: "#94a3b8", // Slate 400 for delicate separators
+    border: "#cbd5e1", // Slate 300
+    borderLight: "#e2e8f0", // Slate 200 for hairline dividers
     background: "#ffffff",
-    link: "#1d4ed8",
+    link: "#0f172a", // ATS-friendly clean charcoal for links
   },
   fonts: {
     heading: "Lora",
@@ -85,20 +86,20 @@ export const theme = {
   },
   fontSizes: {
     name: 24,
-    roleTitle: 10,
-    contact: 8.5,
-    sectionHeading: 9.5,
-    entryTitle: 10.5,
-    entryMeta: 9,
+    roleTitle: 9.5,
+    contact: 8.25,
+    sectionHeading: 9.25,
+    entryTitle: 10,
+    entryMeta: 8.5,
     body: 9,
-    bullets: 8.75,
-    footer: 8,
+    bullets: 8.5,
+    footer: 7.5,
   },
   spacing: {
-    pagePaddingHorizontal: 40,
-    pagePaddingVertical: 36,
-    sectionMarginBottom: 13,
-    entryMarginBottom: 9,
+    pagePaddingHorizontal: 38,
+    pagePaddingVertical: 34,
+    sectionMarginBottom: 12,
+    entryMarginBottom: 8,
   },
 };
 
@@ -109,7 +110,7 @@ export const commonStyles = StyleSheet.create({
     color: theme.colors.primary,
     backgroundColor: theme.colors.background,
     paddingTop: theme.spacing.pagePaddingVertical,
-    paddingBottom: 44, // Leave space for fixed footer
+    paddingBottom: 48, // Generous clearance for fixed footer
     paddingHorizontal: theme.spacing.pagePaddingHorizontal,
     lineHeight: 1.45,
   },
@@ -117,24 +118,24 @@ export const commonStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 6,
-    marginBottom: 8,
+    marginBottom: 7,
   },
   sectionTitle: {
     fontFamily: theme.fonts.body,
     fontSize: theme.fontSizes.sectionHeading,
     fontWeight: "bold",
     textTransform: "uppercase",
-    letterSpacing: 1.4,
+    letterSpacing: 1.25,
     color: theme.colors.primary,
     marginRight: 8,
   },
   sectionLine: {
     flex: 1,
-    height: 0.75,
-    backgroundColor: theme.colors.border,
+    height: 0.5,
+    backgroundColor: theme.colors.borderLight,
   },
   link: {
-    color: theme.colors.link,
+    color: theme.colors.primary,
     textDecoration: "none",
   },
 });

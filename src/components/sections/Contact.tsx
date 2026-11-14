@@ -89,13 +89,6 @@ export function Contact({ settings }: { settings: any }) {
               </form>
             )}
             
-            <a
-              href="/book"
-              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto border border-white/20 px-8 py-4 rounded-full text-sm hover:bg-white/10 transition-colors"
-            >
-              Book a meeting
-            </a>
-
             <div className="space-y-10 md:pl-12">
               <div>
                 <h3 className="text-xs font-medium opacity-50 uppercase tracking-widest mb-4">Connect</h3>
@@ -117,17 +110,23 @@ export function Contact({ settings }: { settings: any }) {
                   )}
                 </ul>
               </div>
+
               <div>
-                <h3 className="text-xs font-medium opacity-50 uppercase tracking-widest mb-4">Resume</h3>
-                <button
-                  type="button"
-                  onClick={handleDownloadCv}
-                  disabled={isDownloadingCv}
-                  aria-label="Download Kidus Amanuel CV as PDF"
-                  className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full p-[1px] font-medium focus:outline-none disabled:opacity-80"
-                >
-                  <span className="absolute inset-[-1000%] animate-[spin_2.5s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#000000_0%,#e5e7eb_50%,#000000_100%)]" />
-                  <span className="inline-flex h-full w-full items-center justify-center gap-2 rounded-full bg-black px-6 py-3 text-white backdrop-blur-3xl transition-colors hover:bg-white/10 text-sm">
+                <h3 className="text-xs font-medium opacity-50 uppercase tracking-widest mb-4">Actions</h3>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <a
+                    href="/book"
+                    className="inline-flex items-center justify-center gap-2 border border-white/20 px-8 py-4 rounded-full text-sm hover:bg-white/10 transition-colors"
+                  >
+                    Book a meeting
+                  </a>
+                  <button
+                    type="button"
+                    onClick={handleDownloadCv}
+                    disabled={isDownloadingCv}
+                    aria-label="Download Kidus Amanuel CV as PDF"
+                    className="inline-flex items-center justify-center gap-2 border border-white/20 px-8 py-4 rounded-full text-sm hover:bg-white/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
                     {isDownloadingCv ? (
                       <>
                         <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -137,10 +136,15 @@ export function Contact({ settings }: { settings: any }) {
                         Generating PDF…
                       </>
                     ) : (
-                      "Download CV (.pdf)"
+                      <>
+                        <svg className="w-4 h-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Download CV (.pdf)
+                      </>
                     )}
-                  </span>
-                </button>
+                  </button>
+                </div>
               </div>
             </div>
           </div>

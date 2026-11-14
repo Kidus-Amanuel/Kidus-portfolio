@@ -11,26 +11,34 @@ interface PdfFooterProps {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    bottom: 20,
+    bottom: 22,
     left: theme.spacing.pagePaddingHorizontal,
     right: theme.spacing.pagePaddingHorizontal,
-    borderTopWidth: 0.75,
+    borderTopWidth: 0.5,
     borderTopColor: theme.colors.borderLight,
     paddingTop: 6,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-  text: {
+  metaLeft: {
     fontSize: theme.fontSizes.footer,
     color: theme.colors.muted,
     fontFamily: theme.fonts.body,
+    letterSpacing: 0.6,
+    textTransform: "uppercase",
   },
-  link: {
+  linkCenter: {
     fontSize: theme.fontSizes.footer,
-    color: theme.colors.muted,
+    color: theme.colors.secondary,
     fontFamily: theme.fonts.body,
     textDecoration: "none",
+  },
+  pageRight: {
+    fontSize: theme.fontSizes.footer,
+    color: theme.colors.muted,
+    fontFamily: theme.fonts.body,
+    letterSpacing: 0.4,
   },
 });
 
@@ -39,22 +47,24 @@ export const PdfFooter: React.FC<PdfFooterProps> = ({
   documentTitle = "Curriculum Vitae",
   websiteUrl,
 }) => {
-  const displayUrl = websiteUrl ? websiteUrl.replace(/^https?:\/\//, "") : "";
+  const displayUrl = websiteUrl
+    ? websiteUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")
+    : "";
 
   return (
     <View style={styles.container} fixed>
-      <Text style={styles.text}>
+      <Text style={styles.metaLeft}>
         {fullName} • {documentTitle}
       </Text>
       {websiteUrl ? (
-        <Link src={websiteUrl} style={styles.link}>
-          <Text style={styles.text}>{displayUrl}</Text>
+        <Link src={websiteUrl} style={styles.linkCenter}>
+          <Text>{displayUrl}</Text>
         </Link>
       ) : (
-        <Text style={styles.text}></Text>
+        <Text style={styles.metaLeft}></Text>
       )}
       <Text
-        style={styles.text}
+        style={styles.pageRight}
         render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}
       />
     </View>

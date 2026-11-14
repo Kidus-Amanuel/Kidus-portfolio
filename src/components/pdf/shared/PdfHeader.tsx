@@ -16,58 +16,60 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSizes.name,
     fontWeight: "bold",
     color: theme.colors.primary,
-    letterSpacing: 0.5,
-    marginBottom: 2,
+    letterSpacing: 0.2,
+    marginBottom: 3,
   },
   headline: {
     fontFamily: theme.fonts.body,
     fontSize: theme.fontSizes.roleTitle,
     fontWeight: "bold",
     textTransform: "uppercase",
-    letterSpacing: 1.8,
-    color: theme.colors.accent,
-    marginBottom: 8,
+    letterSpacing: 1.4,
+    color: theme.colors.muted,
+    marginBottom: 7,
   },
-  divider: {
-    height: 1,
-    backgroundColor: theme.colors.border,
+  hairline: {
+    height: 0.5,
+    backgroundColor: theme.colors.borderLight,
     marginBottom: 6,
   },
   contactRow: {
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
-    gap: 4,
+    rowGap: 2.5,
   },
   contactItem: {
     fontSize: theme.fontSizes.contact,
     color: theme.colors.secondary,
     fontFamily: theme.fonts.body,
   },
-  separator: {
+  contactLink: {
     fontSize: theme.fontSizes.contact,
-    color: theme.colors.muted,
-    marginHorizontal: 3,
-  },
-  link: {
     color: theme.colors.primary,
+    fontFamily: theme.fonts.body,
     textDecoration: "none",
+  },
+  dot: {
+    fontSize: theme.fontSizes.contact,
+    color: theme.colors.subtle,
+    marginHorizontal: 4,
   },
 });
 
 export const PdfHeader: React.FC<PdfHeaderProps> = ({ profile }) => {
-  const contactItems: React.ReactNode[] = [];
+  const items: React.ReactNode[] = [];
 
   if (profile.contactEmail) {
-    contactItems.push(
-      <Link key="email" src={`mailto:${profile.contactEmail}`} style={styles.link}>
-        <Text style={styles.contactItem}>{profile.contactEmail}</Text>
+    items.push(
+      <Link key="email" src={`mailto:${profile.contactEmail}`} style={styles.contactLink}>
+        <Text>{profile.contactEmail}</Text>
       </Link>
     );
   }
 
   if (profile.phone) {
-    contactItems.push(
+    items.push(
       <Text key="phone" style={styles.contactItem}>
         {profile.phone}
       </Text>
@@ -75,7 +77,7 @@ export const PdfHeader: React.FC<PdfHeaderProps> = ({ profile }) => {
   }
 
   if (profile.location) {
-    contactItems.push(
+    items.push(
       <Text key="location" style={styles.contactItem}>
         {profile.location}
       </Text>
@@ -83,26 +85,32 @@ export const PdfHeader: React.FC<PdfHeaderProps> = ({ profile }) => {
   }
 
   if (profile.websiteUrl) {
-    const displayWeb = profile.websiteUrl.replace(/^https?:\/\//, "");
-    contactItems.push(
-      <Link key="web" src={profile.websiteUrl} style={styles.link}>
-        <Text style={styles.contactItem}>{displayWeb}</Text>
+    const cleanWeb = profile.websiteUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
+    items.push(
+      <Link key="web" src={profile.websiteUrl} style={styles.contactLink}>
+        <Text>{cleanWeb}</Text>
       </Link>
     );
   }
 
   if (profile.linkedinUrl) {
-    contactItems.push(
-      <Link key="linkedin" src={profile.linkedinUrl} style={styles.link}>
-        <Text style={styles.contactItem}>LinkedIn</Text>
+    const cleanLinkedIn = profile.linkedinUrl
+      .replace(/^https?:\/\/(www\.)?linkedin\.com\//, "linkedin.com/")
+      .replace(/\/$/, "");
+    items.push(
+      <Link key="linkedin" src={profile.linkedinUrl} style={styles.contactLink}>
+        <Text>{cleanLinkedIn}</Text>
       </Link>
     );
   }
 
   if (profile.githubUrl) {
-    contactItems.push(
-      <Link key="github" src={profile.githubUrl} style={styles.link}>
-        <Text style={styles.contactItem}>GitHub</Text>
+    const cleanGithub = profile.githubUrl
+      .replace(/^https?:\/\/(www\.)?github\.com\//, "github.com/")
+      .replace(/\/$/, "");
+    items.push(
+      <Link key="github" src={profile.githubUrl} style={styles.contactLink}>
+        <Text>{cleanGithub}</Text>
       </Link>
     );
   }
@@ -111,12 +119,12 @@ export const PdfHeader: React.FC<PdfHeaderProps> = ({ profile }) => {
     <View style={styles.container}>
       <Text style={styles.name}>{profile.fullName}</Text>
       {profile.headline ? <Text style={styles.headline}>{profile.headline}</Text> : null}
-      <View style={styles.divider} />
+      <View style={styles.hairline} />
       <View style={styles.contactRow}>
-        {contactItems.map((item, index) => (
+        {items.map((item, index) => (
           <React.Fragment key={index}>
             {item}
-            {index < contactItems.length - 1 && <Text style={styles.separator}>•</Text>}
+            {index < items.length - 1 && <Text style={styles.dot}>•</Text>}
           </React.Fragment>
         ))}
       </View>

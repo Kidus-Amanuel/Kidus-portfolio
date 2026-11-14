@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
   subjectBlock: {
     marginBottom: 14,
     paddingBottom: 4,
-    borderBottomWidth: 0.75,
-    borderBottomColor: theme.colors.border,
+    borderBottomWidth: 0.5,
+    borderBottomColor: theme.colors.borderLight,
   },
   subjectText: {
     fontFamily: theme.fonts.body,
@@ -84,8 +84,8 @@ const styles = StyleSheet.create({
   signerTitle: {
     fontFamily: theme.fonts.body,
     fontSize: theme.fontSizes.roleTitle,
-    color: theme.colors.accent,
-    letterSpacing: 1,
+    color: theme.colors.muted,
+    letterSpacing: 1.2,
     textTransform: "uppercase",
   },
 });

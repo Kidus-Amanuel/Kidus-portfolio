@@ -67,76 +67,160 @@ export default function CoverLetterBuilder() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleDownloadPdf = async () => {
+  const openPrintableCoverLetter = (autoPrint: boolean = false) => {
     if (!editableBody) return;
-    setIsDownloading(true);
-    try {
-      const response = await fetch("/api/cover-letter/download", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          company: company.trim() || "Company",
-          role: role.trim() || "Software Engineer",
-          recipientName: recipientName.trim() || "Hiring Team",
-          recipientTitle: recipientTitle.trim() || undefined,
-          content: editableBody,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to generate PDF");
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      const safeCompany = (company.trim() || "Company").replace(/[^a-zA-Z0-9_-]/g, "-");
-      const safeRole = (role.trim() || "Role").replace(/[^a-zA-Z0-9_-]/g, "-");
-      a.download = `Kidus-Amanuel-Cover-Letter-${safeCompany}-${safeRole}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error(err);
-      alert("Error generating cover letter PDF.");
-    } finally {
-      setIsDownloading(false);
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) {
+      alert("Please allow popups to open the print-ready cover letter.");
+      return;
     }
+
+    const recipient = recipientName.trim() || "Hiring Team";
+    const comp = company.trim() || "Prospective Company";
+    const r = role.trim() || "Software Engineer";
+
+    let content = editableBody
+      .replace(/\{\{\s*company\s*\}\}/gi, comp)
+      .replace(/\{\{\s*role\s*\}\}/gi, r)
+      .replace(/\{\{\s*recipient_name\s*\}\}/gi, recipient);
+
+    const paragraphs = content
+      .split(/\n\s*\n/)
+      .map((p) => p.trim())
+      .filter((p) => p.length > 0);
+
+    const formattedDate = new Date().toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cover Letter – Kidus Amanuel – ${comp}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#111827; --muted:#6B7280; --accent:#1E3A5F; --hair:#E5E7EB;
+  --paper:#fff; --bg:#0B1220;
+  --serif:"Playfair Display",Georgia,"Times New Roman",serif;
+  --sans:Inter,system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:var(--sans);color:var(--ink);font-size:13px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.toolbar{max-width:820px;margin:16px auto 0;padding:0 12px;display:flex;justify-content:flex-end}
+.btn{font:600 13px var(--sans);background:var(--accent);color:#fff;border:0;border-radius:999px;padding:10px 22px;cursor:pointer}
+.btn:hover{opacity:.9}
+.paper{max-width:820px;margin:12px auto 32px;background:var(--paper);color:var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.3);border-radius:4px;overflow:hidden}
+.bar{height:6px;background:var(--accent)}
+.inner{padding:38px 48px 30px}
+header .row{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+h1{font:700 38px/1.1 var(--serif);margin:0}
+.role{margin-top:6px;font-weight:600;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;color:var(--accent)}
+.contact{text-align:right;font-size:12px;color:var(--muted);line-height:1.6}
+.contact a{color:var(--accent);text-decoration:none}
+.rule{border:0;border-top:1px solid var(--hair);margin:18px 0}
+.date{margin:18px 0 14px;color:var(--muted);font-size:12.5px}
+.recipient{margin-bottom:18px;font-size:13px;line-height:1.45}
+.recipient-name{font-weight:600;color:var(--ink)}
+.subject{font-weight:700;font-size:13.5px;color:var(--accent);margin:18px 0 14px;padding-bottom:5px;border-bottom:1px solid var(--hair)}
+.salutation{font-weight:600;margin-bottom:14px}
+p.paragraph{margin:0 0 14px;line-height:1.6;color:#374151;text-align:justify}
+.signoff{margin-top:22px}
+.signer-name{font:700 18px var(--serif);color:var(--ink);margin-top:20px}
+.signer-title{font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-top:2px}
+footer.sheet-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 48px;padding:12px 0 20px;border-top:.75px solid var(--hair);font-size:10.5px;color:var(--muted)}
+footer.sheet-foot span{flex:1}
+footer.sheet-foot span:nth-child(2){text-align:center}
+footer.sheet-foot span:nth-child(3){text-align:right}
+footer.sheet-foot a{color:var(--accent);text-decoration:none}
+@page{
+  size:A4;margin:14mm 12mm 16mm;
+  @bottom-left{content:"Kidus Amanuel · Cover Letter";font:7.5pt Inter,Arial,sans-serif;color:#6B7280}
+  @bottom-center{content:"kidus-portfolio-gray.vercel.app";font:7.5pt Inter,Arial,sans-serif;color:#1E3A5F}
+  @bottom-right{content:"Page " counter(page) " of " counter(pages);font:7.5pt Inter,Arial,sans-serif;color:#6B7280}
+}
+@media print{
+  html{padding:0}
+  body{background:#fff!important;font-size:10pt}
+  .toolbar{display:none!important}
+  .paper{margin:0!important;max-width:none!important;box-shadow:none!important;border-radius:0}
+  .inner{padding:0!important}
+  .bar{height:4pt!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  h1{font-size:26pt!important}
+  .inner{padding-top:10pt!important}
+  footer.sheet-foot{margin:0!important;padding:8px 0 0!important;border-top:.5pt solid #E5E7EB!important}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+}
+</style>
+</head>
+<body>
+<div class="toolbar"><button class="btn" onclick="window.print()">Download PDF / Print</button></div>
+<main class="paper">
+  <div class="bar"></div>
+  <div class="inner">
+    <header>
+      <div class="row">
+        <div>
+          <h1>Kidus Amanuel</h1>
+          <div class="role">Full-Stack &amp; AI Engineer</div>
+        </div>
+        <div class="contact">
+          <a href="mailto:kidusamanuel@yahoo.com">kidusamanuel@yahoo.com</a><br>
+          Addis Ababa, Ethiopia (Open to Remote)<br>
+          <a href="https://kidus-portfolio-gray.vercel.app" target="_blank">kidus-portfolio-gray.vercel.app</a> · <a href="https://linkedin.com/in/kidus-amanuel" target="_blank">LinkedIn</a> · <a href="https://github.com/Kidus-Amanuel" target="_blank">GitHub</a>
+        </div>
+      </div>
+      <hr class="rule">
+    </header>
+    <div class="date">${formattedDate}</div>
+    <div class="recipient">
+      <div class="recipient-name">${recipient}</div>
+      ${recipientTitle ? `<div>${recipientTitle}</div>` : ""}
+      <div>${comp}</div>
+    </div>
+    <div class="subject">RE: Application for ${r}</div>
+    <div class="salutation">Dear ${recipient},</div>
+    ${paragraphs.map((p) => `<p class="paragraph">${p}</p>`).join("")}
+    <div class="signoff">
+      <div>Sincerely,</div>
+      <div class="signer-name">Kidus Amanuel</div>
+      <div class="signer-title">Full-Stack &amp; AI Engineer</div>
+    </div>
+  </div>
+  <footer class="sheet-foot">
+    <span>Kidus Amanuel · Cover Letter</span>
+    <span><a href="https://kidus-portfolio-gray.vercel.app" target="_blank">kidus-portfolio-gray.vercel.app</a></span>
+    <span>Page 1 of 1</span>
+  </footer>
+</main>
+${
+  autoPrint
+    ? `<script>
+  window.addEventListener('load', () => {
+    setTimeout(() => { window.print(); }, 400);
+  });
+</script>`
+    : ""
+}
+</body>
+</html>`;
+
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
   };
 
-  const handleOpenPdfPreview = async () => {
-    if (!editableBody) return;
-    setIsDownloading(true);
-    try {
-      const response = await fetch("/api/cover-letter/download", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          company: company.trim() || "Company",
-          role: role.trim() || "Software Engineer",
-          recipientName: recipientName.trim() || "Hiring Team",
-          recipientTitle: recipientTitle.trim() || undefined,
-          content: editableBody,
-        }),
-      });
+  const handleDownloadPdf = () => {
+    openPrintableCoverLetter(true);
+  };
 
-      if (!response.ok) throw new Error("Failed to load PDF preview");
-
-      const blob = await response.blob();
-      if (previewPdfUrl) {
-        window.URL.revokeObjectURL(previewPdfUrl);
-      }
-      const url = window.URL.createObjectURL(blob);
-      setPreviewPdfUrl(url);
-      setIsPreviewModalOpen(true);
-    } catch (err) {
-      console.error(err);
-      alert("Error generating preview.");
-    } finally {
-      setIsDownloading(false);
-    }
+  const handleOpenPdfPreview = () => {
+    openPrintableCoverLetter(false);
   };
 
   return (

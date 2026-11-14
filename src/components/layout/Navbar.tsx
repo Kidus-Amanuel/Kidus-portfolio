@@ -36,8 +36,13 @@ export function Navbar() {
     setMobileOpen(false);
   }, [pathname]);
 
-  // Hide the public navbar on admin and lab invite pages
-  if (pathname?.startsWith("/admin") || pathname?.startsWith("/lab/invite")) return null;
+  // Hide the public navbar on admin, lab invite, and cv pages
+  if (
+    pathname?.startsWith("/admin") ||
+    pathname?.startsWith("/lab/invite") ||
+    pathname?.startsWith("/cv")
+  )
+    return null;
 
   // Section links are anchors on the home page. From any other route they must
   // point back at "/" first, otherwise "/book#about" lands nowhere.

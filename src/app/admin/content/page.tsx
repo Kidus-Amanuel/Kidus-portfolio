@@ -2,7 +2,8 @@ import { prisma } from "@/lib/db";
 import { 
   addProject, deleteProject, editProject,
   addExperience, deleteExperience, editExperience,
-  addCertificate, deleteCertificate, editCertificate 
+  addCertificate, deleteCertificate, editCertificate,
+  addSkill, deleteSkill
 } from "../actions";
 import { Trash2, Edit2, X } from "lucide-react";
 import Link from "next/link";
@@ -11,6 +12,7 @@ export default async function ContentManager({ searchParams }: { searchParams: {
   let projects: any[] = [];
   let experience: any[] = [];
   let certificates: any[] = [];
+  let skills: any[] = [];
 
   let editingItem: any = null;
 
@@ -18,6 +20,7 @@ export default async function ContentManager({ searchParams }: { searchParams: {
     projects = await prisma.project.findMany({ orderBy: { order: "asc" } });
     experience = await prisma.experience.findMany({ orderBy: { order: "asc" } });
     certificates = await prisma.certificate.findMany({ orderBy: { order: "asc" } });
+    skills = await prisma.skill.findMany({ orderBy: [{ category: "asc" }, { order: "asc" }] });
 
     if (searchParams.edit && searchParams.type) {
       if (searchParams.type === "project") editingItem = await prisma.project.findUnique({ where: { id: searchParams.edit } });
@@ -190,6 +193,34 @@ export default async function ContentManager({ searchParams }: { searchParams: {
               <input name="url" placeholder="Credential URL" className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-sm" />
               <input name="order" type="number" defaultValue="0" placeholder="Display Order (0 is first)" className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-sm" />
               <button type="submit" className="w-full bg-white text-black font-bold py-3 rounded-lg hover:bg-gray-200 transition-colors">Add Certificate</button>
+            </form>
+          </div>
+
+          {/* SKILLS SECTION */}
+          <div className="space-y-8">
+            <h2 className="text-2xl font-bold border-b border-white/10 pb-4">Manage Skills</h2>
+            
+            <div className="space-y-4 max-h-[300px] overflow-y-auto pr-1">
+              {skills.map(s => (
+                <div key={s.id} className="p-4 border border-white/10 rounded-xl bg-white/5 flex justify-between items-center">
+                  <div>
+                    <h3 className="font-bold text-sm">{s.name}</h3>
+                    <p className="text-xs text-white/50">{s.category}</p>
+                  </div>
+                  <form action={deleteSkill}>
+                    <input type="hidden" name="id" value={s.id} />
+                    <button type="submit" className="text-red-400 hover:text-red-300 p-2"><Trash2 className="w-4 h-4" /></button>
+                  </form>
+                </div>
+              ))}
+            </div>
+
+            <form action={addSkill} className="p-6 border border-white/10 rounded-2xl bg-white/5 space-y-4">
+              <h3 className="font-bold text-lg mb-4">Add Skill</h3>
+              <input name="name" placeholder="Skill Name (e.g. Next.js, TypeScript)" required className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-sm" />
+              <input name="category" placeholder="Category (e.g. Core Stack, Backend & DB, AI & Lab)" required className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-sm" />
+              <input name="order" type="number" defaultValue="0" placeholder="Display Order" className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-sm" />
+              <button type="submit" className="w-full bg-white text-black font-bold py-3 rounded-lg hover:bg-gray-200 transition-colors">Add Skill</button>
             </form>
           </div>
 

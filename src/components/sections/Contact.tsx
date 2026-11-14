@@ -90,7 +90,12 @@ export function Contact({ settings }: { settings: any }) {
               </div>
               <div>
                 <h3 className="text-xs font-medium opacity-50 uppercase tracking-widest mb-4">Resume</h3>
-                <a href="/KIDUS%20AMANUEL%20CVs.pdf" target="_blank" rel="noopener noreferrer" className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full p-[1px] font-medium focus:outline-none">
+                <a
+                  href="/api/cv/download"
+                  download="Kidus-Amanuel-CV.pdf"
+                  aria-label="Download Kidus Amanuel CV as PDF"
+                  className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full p-[1px] font-medium focus:outline-none"
+                >
                   <span className="absolute inset-[-1000%] animate-[spin_2.5s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#000000_0%,#e5e7eb_50%,#000000_100%)]" />
                   <span className="inline-flex h-full w-full items-center justify-center gap-2 rounded-full bg-black px-6 py-3 text-white backdrop-blur-3xl transition-colors hover:bg-white/10 text-sm">
                     Download CV (.pdf)

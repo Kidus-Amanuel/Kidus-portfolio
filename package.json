@@ -12,6 +12,7 @@
   "dependencies": {
     "@ai-sdk/google": "^0.0.55",
     "@prisma/client": "^5.20.0",
+    "@react-pdf/renderer": "^4.9.0",
     "@react-three/drei": "^9.105.6",
     "@react-three/fiber": "^8.16.2",
     "@vercel/analytics": "^2.0.1",

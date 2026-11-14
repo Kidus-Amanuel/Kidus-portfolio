@@ -1,0 +1,225 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model InviteResponse {
+  id         String   @id @default(cuid())
+  senderName String
+  friendName String
+  plan       String
+  ipHash     String?
+  acceptedAt DateTime @default(now())
+}
+
+model Subscriber {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  status        String          @default("active") // "active" | "unsubscribed"
+  createdAt     DateTime        @default(now())
+  EmailDelivery EmailDelivery[]
+}
+
+// ==========================================
+// PORTFOLIO CMS CONTENT
+// ==========================================
+
+model Experience {
+  id          String   @id @default(cuid())
+  company     String
+  role        String
+  startDate   String
+  endDate     String
+  description String   @db.Text
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Education {
+  id          String   @id @default(cuid())
+  school      String
+  degree      String
+  startDate   String
+  endDate     String
+  description String?  @db.Text
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  category    String
+  description String   @db.Text
+  tags        String[] // PostgreSQL supports string arrays natively
+  link        String?
+  github      String?
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Certificate {
+  id        String   @id @default(cuid())
+  name      String
+  issuer    String
+  date      String
+  url       String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model Skill {
+  id        String   @id @default(cuid())
+  category  String
+  name      String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([category, order])
+}
+
+model EmailTemplate {
+  id            String          @id @default(cuid())
+  name          String // e.g. "IBM Hackathon Announcement"
+  subject       String
+  html          String          @db.Text
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  EmailCampaign EmailCampaign[]
+}
+
+// ==========================================
+// YES-ONLY INVITE — AI joke cache
+// ==========================================
+
+model Question {
+  id         String   @id @default(cuid())
+  normalized String   @unique
+  original   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  answers Answer[]
+}
+
+model Answer {
+  id         String   @id @default(cuid())
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  content    String   @db.Text
+  usageCount Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  @@index([questionId])
+}
+
+model SiteSettings {
+  id           String   @id @default("global")
+  fullName     String   @default("Kidus Amanuel")
+  headline     String   @default("Full-Stack & AI Engineer")
+  phone        String   @default("+251 900 000 000")
+  location     String   @default("Addis Ababa, Ethiopia (Open to Remote)")
+  websiteUrl   String   @default("https://kidus.dev")
+  summary      String   @default("Full-stack engineer with 3+ years building scalable SaaS applications and production AI systems.") @db.Text
+  contactEmail String   @default("kidusamanuel@yahoo.com")
+  senderEmail  String   @default("kidusamanuel0371@gmail.com")
+  githubUrl    String   @default("https://github.com/Kidus-Amanuel")
+  linkedinUrl  String   @default("https://linkedin.com/in/kidus-amanuel")
+  instagramUrl String   @default("")
+  upworkUrl    String   @default("")
+  updatedAt    DateTime @updatedAt
+}
+
+model EmailCampaign {
+  id              String        @id @default(cuid())
+  templateId      String
+  template        EmailTemplate @relation(fields: [templateId], references: [id])
+  status          String        @default("DRAFT") // DRAFT, RUNNING, PAUSED, COMPLETED
+  batchSize       Int           @default(50)
+  intervalMinutes Int           @default(10)
+  nextRunAt       DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  deliveries EmailDelivery[]
+}
+
+model EmailDelivery {
+  id           String        @id @default(cuid())
+  campaignId   String
+  campaign     EmailCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  subscriberId String
+  subscriber   Subscriber    @relation(fields: [subscriberId], references: [id], onDelete: Cascade)
+  templateId   String
+  status       String        @default("PENDING") // PENDING, SENT, FAILED
+  error        String?       @db.Text
+  sentAt       DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@unique([subscriberId, templateId])
+  @@index([campaignId, status])
+}
+
+// ==========================================
+// MEETING BOOKING SYSTEM
+// ==========================================
+
+model Booking {
+  id                String    @id @default(cuid())
+  requesterName     String
+  requesterEmail    String
+  requesterPhone    String?
+  requesterCompany  String?
+  requesterTimezone String    @default("Africa/Nairobi")
+  topic             String
+  notes             String?   @db.Text
+  durationMinutes   Int       @default(30)
+  /// Instant the visitor proposed (never changes).
+  proposedAt        DateTime
+  /// Instant the meeting is actually booked for (may be moved by the host).
+  startsAt          DateTime
+  endsAt            DateTime
+  /// PENDING | ACCEPTED | DECLINED | CANCELLED
+  status            String    @default("PENDING")
+  /// GOOGLE_MEET | ZOOM | WHATSAPP | TELEGRAM
+  platform          String    @default("GOOGLE_MEET")
+  meetingUrl        String?
+  meetingId         String?
+  /// Host-only join URL (Zoom start_url).
+  hostUrl           String?
+  meetingPassword   String?
+  calendarEventId   String?
+  calendarHtmlLink  String?
+  /// Human-readable note about a partial failure (e.g. calendar auth missing).
+  failureReason     String?   @db.Text
+  decidedAt         DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([status, proposedAt])
+  @@index([requesterEmail])
+}
+
+// Key/value store for runtime-configurable integration credentials.
+// Environment variables always win over rows in this table.
+model AppSetting {
+  key       String   @id
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+}

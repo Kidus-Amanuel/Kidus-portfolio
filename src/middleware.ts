@@ -2,11 +2,12 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  // Protect all /admin routes with Basic Auth, plus the OAuth initiation route.
+  // Protect all /admin routes with Basic Auth, plus the OAuth initiation route and cover-letter API.
   const isAdminRoute = request.nextUrl.pathname.startsWith("/admin");
   const isOAuthStart = request.nextUrl.pathname === "/api/google/connect";
+  const isCoverLetterApi = request.nextUrl.pathname.startsWith("/api/cover-letter");
 
-  if (isAdminRoute || isOAuthStart) {
+  if (isAdminRoute || isOAuthStart || isCoverLetterApi) {
     const basicAuth = request.headers.get("authorization");
     const adminPassword = process.env.ADMIN_PASSWORD ?? "kidus-admin";
 
@@ -28,5 +29,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/google/connect"],
+  matcher: ["/admin/:path*", "/api/google/connect", "/api/cover-letter/:path*"],
 };

@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -82,6 +83,16 @@ model Certificate {
   createdAt DateTime @default(now())
 }
 
+model Skill {
+  id        String   @id @default(cuid())
+  category  String
+  name      String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([category, order])
+}
+
 model EmailTemplate {
   id            String          @id @default(cuid())
   name          String // e.g. "IBM Hackathon Announcement"
@@ -119,6 +130,12 @@ model Answer {
 
 model SiteSettings {
   id           String   @id @default("global")
+  fullName     String   @default("Kidus Amanuel")
+  headline     String   @default("Full-Stack & AI Engineer")
+  phone        String   @default("+251 900 000 000")
+  location     String   @default("Addis Ababa, Ethiopia (Open to Remote)")
+  websiteUrl   String   @default("https://kidus.dev")
+  summary      String   @default("Full-stack engineer with 3+ years building scalable SaaS applications and production AI systems.") @db.Text
   contactEmail String   @default("kidusamanuel@yahoo.com")
   senderEmail  String   @default("kidusamanuel0371@gmail.com")
   githubUrl    String   @default("https://github.com/Kidus-Amanuel")

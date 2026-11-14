@@ -74,7 +74,7 @@ const fallbackProfile: CvProfile = {
   contactEmail: "kidusamanuel@yahoo.com",
   phone: "+251 900 000 000",
   location: "Addis Ababa, Ethiopia (Open to Remote)",
-  websiteUrl: "https://kidus.dev",
+  websiteUrl: "https://kidus-portfolio-gray.vercel.app",
   linkedinUrl: "https://linkedin.com/in/kidus-amanuel",
   githubUrl: "https://github.com/Kidus-Amanuel",
   summary:
@@ -138,7 +138,7 @@ const fallbackProjects: CvProject[] = [
     description:
       "Engineered real-time streaming LLM system tailoring ATS-optimized cover letters and dynamic PDF generation.",
     tags: ["Next.js", "Vercel AI SDK", "@react-pdf/renderer", "PostgreSQL"],
-    link: "https://kidus.dev",
+    link: "https://kidus-portfolio-gray.vercel.app",
     github: "https://github.com/Kidus-Amanuel",
     featured: true,
     order: 0,
@@ -150,7 +150,7 @@ const fallbackProjects: CvProject[] = [
     description:
       "Multi-tenant application featuring role-based access, real-time analytics, and automated email campaign queue.",
     tags: ["React", "TypeScript", "Tailwind", "Neon Postgres", "Prisma"],
-    link: "https://kidus.dev",
+    link: "https://kidus-portfolio-gray.vercel.app",
     github: "https://github.com/Kidus-Amanuel",
     featured: true,
     order: 1,

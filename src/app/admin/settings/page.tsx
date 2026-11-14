@@ -27,7 +27,7 @@ export default function SettingsPage() {
         headline: data.headline || "Full-Stack & AI Engineer",
         phone: data.phone || "+251 900 000 000",
         location: data.location || "Addis Ababa, Ethiopia (Open to Remote)",
-        websiteUrl: data.websiteUrl || "https://kidus.dev",
+        websiteUrl: data.websiteUrl || "https://kidus-portfolio-gray.vercel.app",
         summary:
           data.summary ||
           "Full-stack engineer with 3+ years building scalable SaaS applications and production AI systems.",

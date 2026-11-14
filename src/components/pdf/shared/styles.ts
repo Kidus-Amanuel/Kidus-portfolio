@@ -7,42 +7,58 @@ Font.registerHyphenationCallback((word) => [word]);
 
 let fontsRegistered = false;
 
+function resolveFontFile(file: string): string {
+  const candidates = [
+    path.join(process.cwd(), "public", "fonts", file),
+    path.join(process.cwd(), "kidus-portfolio", "public", "fonts", file),
+    path.join(__dirname, "../../../../public/fonts", file),
+    path.join(__dirname, "../../public/fonts", file),
+    path.resolve("./public/fonts", file),
+    path.resolve("./kidus-portfolio/public/fonts", file),
+  ];
+  for (const c of candidates) {
+    if (fs.existsSync(c)) {
+      return c;
+    }
+  }
+  return candidates[0];
+}
+
+function getFontSrc(file: string): string {
+  if (typeof window === "undefined") {
+    try {
+      const fullPath = resolveFontFile(file);
+      if (fs.existsSync(fullPath)) {
+        const fileBuffer = fs.readFileSync(fullPath);
+        return `data:font/truetype;charset=utf-8;base64,${fileBuffer.toString("base64")}`;
+      }
+    } catch (e) {
+      console.warn(`Could not read font file ${file} as base64, falling back to path`, e);
+    }
+    return resolveFontFile(file);
+  }
+  return `/fonts/${file}`;
+}
+
 export function registerFonts() {
   if (fontsRegistered) return;
-  const isServer = typeof window === "undefined";
-  const getFontPath = (file: string) => {
-    if (isServer) {
-      const candidates = [
-        path.join(process.cwd(), "public", "fonts", file),
-        path.join(process.cwd(), "kidus-portfolio", "public", "fonts", file),
-        path.resolve(__dirname, "../../../../public/fonts", file),
-      ];
-      for (const candidate of candidates) {
-        if (fs.existsSync(candidate)) {
-          return candidate;
-        }
-      }
-      return candidates[0];
-    }
-    return `/fonts/${file}`;
-  };
 
   try {
     Font.register({
       family: "Lora",
       fonts: [
-        { src: getFontPath("Lora-Regular.ttf"), fontWeight: "normal" },
-        { src: getFontPath("Lora-Bold.ttf"), fontWeight: "bold" },
-        { src: getFontPath("Lora-Italic.ttf"), fontStyle: "italic" },
+        { src: getFontSrc("Lora-Regular.ttf"), fontWeight: "normal" },
+        { src: getFontSrc("Lora-Bold.ttf"), fontWeight: "bold" },
+        { src: getFontSrc("Lora-Italic.ttf"), fontStyle: "italic" },
       ],
     });
 
     Font.register({
       family: "Inter",
       fonts: [
-        { src: getFontPath("Inter-Regular.ttf"), fontWeight: "normal" },
-        { src: getFontPath("Inter-Bold.ttf"), fontWeight: "bold" },
-        { src: getFontPath("Inter-Italic.ttf"), fontStyle: "italic" },
+        { src: getFontSrc("Inter-Regular.ttf"), fontWeight: "normal" },
+        { src: getFontSrc("Inter-Bold.ttf"), fontWeight: "bold" },
+        { src: getFontSrc("Inter-Italic.ttf"), fontStyle: "italic" },
       ],
     });
 
@@ -97,7 +113,6 @@ export const commonStyles = StyleSheet.create({
     paddingHorizontal: theme.spacing.pagePaddingHorizontal,
     lineHeight: 1.45,
   },
-  // Section Header
   sectionHeader: {
     flexDirection: "row",
     alignItems: "center",
@@ -118,7 +133,6 @@ export const commonStyles = StyleSheet.create({
     height: 0.75,
     backgroundColor: theme.colors.border,
   },
-  // Link styling
   link: {
     color: theme.colors.link,
     textDecoration: "none",

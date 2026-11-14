@@ -56,7 +56,7 @@ export async function prepareCoverLetterData(
     contactEmail: settings?.contactEmail?.trim() || "kidusamanuel@yahoo.com",
     phone: settings?.phone?.trim() || "+251 900 000 000",
     location: settings?.location?.trim() || "Addis Ababa, Ethiopia (Open to Remote)",
-    websiteUrl: settings?.websiteUrl?.trim() || "https://kidus.dev",
+    websiteUrl: settings?.websiteUrl?.trim() || "https://kidus-portfolio-gray.vercel.app",
     linkedinUrl: settings?.linkedinUrl?.trim() || "https://linkedin.com/in/kidus-amanuel",
     githubUrl: settings?.githubUrl?.trim() || "https://github.com/Kidus-Amanuel",
     summary: settings?.summary?.trim() || "",

@@ -5,6 +5,35 @@ import { motion } from "framer-motion";
 export function Contact({ settings }: { settings: any }) {
   const [formState, setFormState] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
+  const [isDownloadingCv, setIsDownloadingCv] = useState(false);
+
+  const handleDownloadCv = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isDownloadingCv) return;
+    setIsDownloadingCv(true);
+
+    try {
+      const res = await fetch("/api/cv/download");
+      if (!res.ok) {
+        throw new Error("Failed to download CV");
+      }
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Kidus-Amanuel-CV.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("CV download error:", err);
+      // Fallback: direct navigation if fetch fails
+      window.location.href = "/api/cv/download";
+    } finally {
+      setIsDownloadingCv(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,17 +119,28 @@ export function Contact({ settings }: { settings: any }) {
               </div>
               <div>
                 <h3 className="text-xs font-medium opacity-50 uppercase tracking-widest mb-4">Resume</h3>
-                <a
-                  href="/api/cv/download"
-                  download="Kidus-Amanuel-CV.pdf"
+                <button
+                  type="button"
+                  onClick={handleDownloadCv}
+                  disabled={isDownloadingCv}
                   aria-label="Download Kidus Amanuel CV as PDF"
-                  className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full p-[1px] font-medium focus:outline-none"
+                  className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full p-[1px] font-medium focus:outline-none disabled:opacity-80"
                 >
                   <span className="absolute inset-[-1000%] animate-[spin_2.5s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#000000_0%,#e5e7eb_50%,#000000_100%)]" />
                   <span className="inline-flex h-full w-full items-center justify-center gap-2 rounded-full bg-black px-6 py-3 text-white backdrop-blur-3xl transition-colors hover:bg-white/10 text-sm">
-                    Download CV (.pdf)
+                    {isDownloadingCv ? (
+                      <>
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Generating PDF…
+                      </>
+                    ) : (
+                      "Download CV (.pdf)"
+                    )}
                   </span>
-                </a>
+                </button>
               </div>
             </div>
           </div>

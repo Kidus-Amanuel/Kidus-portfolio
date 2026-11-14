@@ -134,7 +134,7 @@ model SiteSettings {
   headline     String   @default("Full-Stack & AI Engineer")
   phone        String   @default("+251 900 000 000")
   location     String   @default("Addis Ababa, Ethiopia (Open to Remote)")
-  websiteUrl   String   @default("https://kidus.dev")
+  websiteUrl   String   @default("https://kidus-portfolio-gray.vercel.app")
   summary      String   @default("Full-stack engineer with 3+ years building scalable SaaS applications and production AI systems.") @db.Text
   contactEmail String   @default("kidusamanuel@yahoo.com")
   senderEmail  String   @default("kidusamanuel0371@gmail.com")

@@ -2,7 +2,12 @@ import { randomUUID } from "node:crypto";
 import { getAppUrl, getSetting } from "@/lib/settings";
 
 const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
-const GOOGLE_AUTH_URL = "https://accounts.google.com/o/o2/auth";
+/**
+ * The legacy /o/o2/auth endpoint now returns Google's "404 - The requested URL
+ * was not found on this server" page for every client. /o/oauth2/v2/auth is the
+ * current endpoint and correctly redirects into the consent flow.
+ */
+const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 const CALENDAR_API = "https://www.googleapis.com/calendar/v3";
 
 /**

@@ -16,7 +16,7 @@ export default async function Image() {
           Full-Stack & AI Engineer
         </div>
         <div style={{ display: 'flex', position: 'absolute', bottom: 40, right: 60, fontSize: 24, color: '#ffffff', opacity: 0.5 }}>
-          kidus.dev
+          kidus-portfolio-gray.vercel.app
         </div>
       </div>
     ),

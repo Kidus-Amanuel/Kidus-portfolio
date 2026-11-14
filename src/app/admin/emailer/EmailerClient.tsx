@@ -13,13 +13,13 @@ export function EmailerClient({ templates, campaigns = [], settings }: { templat
   const [templateName, setTemplateName] = useState("");
   
   const [customVars, setCustomVars] = useState<Record<string, string>>({
-    portfolio_url: "https://kidus.dev", // or NEXT_PUBLIC_APP_URL
+    portfolio_url: "https://kidus-portfolio-gray.vercel.app", // or NEXT_PUBLIC_APP_URL
     linkedin_url: settings?.linkedinUrl || "",
     github_url: settings?.githubUrl || "",
     instagram_url: settings?.instagramUrl || "",
     upwork_url: settings?.upworkUrl || "",
     contact_email: settings?.contactEmail || "",
-    unsubscribe_url: "https://kidus.dev/unsubscribe"
+    unsubscribe_url: "https://kidus-portfolio-gray.vercel.app/unsubscribe"
   });
   // Campaign state
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
@@ -206,7 +206,7 @@ export function EmailerClient({ templates, campaigns = [], settings }: { templat
                     srcDoc={body
                       .replace(/\{\{?name\}?\}/gi, "Kidus Amanuel")
                       .replace(/\{\{?email\}?\}/gi, "preview@example.com")
-                      .replace(/\{\{?portfolio_url\}?\}/gi, "https://kidus.dev")
+                      .replace(/\{\{?portfolio_url\}?\}/gi, "https://kidus-portfolio-gray.vercel.app")
                       .replace(/\{\{?linkedin_url\}?\}/gi, "https://linkedin.com/in/kidus-amanuel")
                       .replace(/\{\{?github_url\}?\}/gi, "https://github.com/Kidus-Amanuel")
                       .replace(/\{\{?unsubscribe_url\}?\}/gi, "#unsubscribe")

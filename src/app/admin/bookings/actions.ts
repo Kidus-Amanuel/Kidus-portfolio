@@ -32,6 +32,11 @@ export async function acceptBooking(formData: FormData): Promise<BookingActionRe
   let startsAt = booking.startsAt;
   let durationMinutes = booking.durationMinutes;
 
+  // Duration can be changed on its own, even when the proposed time is kept.
+  if (durationInput >= 15 && durationInput <= 180) {
+    durationMinutes = durationInput;
+  }
+
   if (override) {
     const match = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})$/.exec(override);
     if (!match) return { ok: false, message: "The new date and time could not be read." };
@@ -41,8 +46,6 @@ export async function acceptBooking(formData: FormData): Promise<BookingActionRe
     } catch {
       return { ok: false, message: "The new date and time could not be read." };
     }
-
-    if (durationInput >= 15 && durationInput <= 180) durationMinutes = durationInput;
   }
 
   if (startsAt.getTime() < Date.now()) {

@@ -97,7 +97,7 @@ export async function processEmailBatches(): Promise<BatchProcessingResult> {
     const siteSettings = await prisma.siteSettings.findUnique({ where: { id: "global" } });
     const linkedinUrl = siteSettings?.linkedinUrl || "https://linkedin.com/in/kidus-amanuel";
     const githubUrl = siteSettings?.githubUrl || "https://github.com/Kidus-Amanuel";
-    const portfolioUrl = process.env.NEXT_PUBLIC_APP_URL || "https://kidus.dev";
+    const portfolioUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.APP_URL || "https://kidus-portfolio-gray.vercel.app";
 
     for (const delivery of deliveries) {
       const s = delivery.subscriber;

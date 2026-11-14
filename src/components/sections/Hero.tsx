@@ -43,7 +43,7 @@ export function Hero() {
           {/* CTA Buttons — sleek and compact */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 mt-6 sm:mt-8 mb-4 sm:mb-6">
             <a
-              href="#contact"
+              href="/book"
               className="group relative inline-flex h-11 sm:h-12 shrink-0 items-center justify-center overflow-hidden rounded-full p-[1px] font-medium focus:outline-none"
             >
               <span className="absolute inset-[-1000%] animate-[spin_2.5s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#000000_0%,#e5e7eb_50%,#000000_100%)]" />

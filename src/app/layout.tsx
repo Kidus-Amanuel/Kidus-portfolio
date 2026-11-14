@@ -9,6 +9,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-geist-sans" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://kidus-portfolio-gray.vercel.app"),
   title: "Kidus Amanuel | Full-Stack AI Engineer",
   description: "Full-stack engineer who ships SaaS products fast, now building AI-powered systems.",
   keywords: ["Next.js", "AI Engineer", "Software Engineer", "React", "TypeScript", "Ethiopia"],

@@ -1,5 +1,6 @@
 import type { Booking } from "@prisma/client";
 import { getHostEmail, sendEmail } from "@/lib/email";
+import { getAppUrl } from "@/lib/settings";
 import { buildIcs } from "./ics";
 import { MeetingOutcome, meetingSummary } from "./meeting";
 import { formatDateTimeInZone, HOST_TIME_ZONE } from "./time";
@@ -42,7 +43,7 @@ function emailShell(title: string, bodyHtml: string, cta?: { label: string; url:
             }
             <tr>
               <td style="padding:24px 32px 28px 32px;border-top:1px solid #eeeeee;">
-                <p style="margin:0;font-size:12px;color:#999999;">Sent automatically by the booking system on kidus.dev.</p>
+                <p style="margin:0;font-size:12px;color:#999999;">Sent automatically by the booking system on https://kidus-portfolio-gray.vercel.app.</p>
               </td>
             </tr>
           </table>
@@ -74,7 +75,7 @@ function timeRows(booking: Booking): string {
 /** Tell the host that a new request is waiting for a decision. */
 export async function notifyHostOfNewRequest(booking: Booking): Promise<void> {
   const hostEmail = await getHostEmail();
-  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://kidus.dev").replace(/\/+$/, "");
+  const appUrl = await getAppUrl();
 
   const body = `
     <p><strong>${escapeHtml(booking.requesterName)}</strong> wants to meet about
@@ -104,7 +105,7 @@ export async function notifyRequesterOfAcceptance(
   booking: Booking,
   outcome: MeetingOutcome,
 ): Promise<void> {
-  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://kidus.dev").replace(/\/+$/, "");
+  const appUrl = await getAppUrl();
 
   const joinBlock = outcome.meetingUrl
     ? `<p style="margin:20px 0;">
@@ -132,9 +133,9 @@ export async function notifyRequesterOfAcceptance(
         {
           filename: "kidus-meeting.ics",
           content: buildIcs({
-            uid: `${booking.id}@kidus.dev`,
+            uid: `${booking.id}@${new URL(appUrl).hostname}`,
             summary: meetingSummary(booking),
-            description: `Topic: ${booking.topic}\nBooked through kidus.dev`,
+            description: `Topic: ${booking.topic}\nBooked through https://kidus-portfolio-gray.vercel.app`,
             location: outcome.meetingUrl ?? undefined,
             url: outcome.meetingUrl ?? undefined,
             start: booking.startsAt,

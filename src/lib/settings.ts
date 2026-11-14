@@ -69,6 +69,6 @@ export async function setSetting(key: SettingKey, value: string | null): Promise
 export async function getAppUrl(): Promise<string> {
   const configured = await getSetting("APP_URL");
   const fromEnv = process.env.APP_URL || process.env.NEXT_PUBLIC_APP_URL;
-  const base = configured || fromEnv || "https://kidus.dev";
+  const base = configured || fromEnv || "https://kidus-portfolio-gray.vercel.app";
   return base.replace(/\/+$/, "");
 }

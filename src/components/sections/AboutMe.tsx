@@ -26,8 +26,8 @@ export function AboutMe() {
         </p>
 
         <p className="text-sm sm:text-base md:text-lg text-mutedForeground leading-relaxed">
-          Currently working as an IT Trainee at Ethiopian Airlines, I am actively transitioning
-          into AI engineering — building systems that leverage LLMs to solve real-world
+          I am actively working
+          into AI engineering building systems that leverage LLMs to solve real world
           problems.
         </p>
       </motion.div>

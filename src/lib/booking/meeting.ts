@@ -34,7 +34,7 @@ export function buildMeetingDescription(
     meetingUrl ? `Join link: ${meetingUrl}` : "",
     booking.notes ? `\nNotes:\n${booking.notes}` : "",
     "",
-    "Booked through kidus.dev",
+    "Booked through https://kidus-portfolio-gray.vercel.app",
   ];
 
   return lines.filter(Boolean).join("\n");

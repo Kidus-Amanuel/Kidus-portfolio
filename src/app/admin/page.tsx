@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db";
 import Link from "next/link";
-import { Mail, MessageSquare, Users, Send, Database, FileText, Activity } from "lucide-react";
+import { Mail, MessageSquare, Users, Send, Database, FileText, Activity, CalendarClock } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
 
@@ -12,22 +12,25 @@ export default async function AdminDashboard() {
   let inviteCount = 0;
   let runningCampaigns = 0;
   let totalSentEmails = 0;
+  let pendingBookings = 0;
 
   try {
-    const [contact, subs, invite, campaigns, deliveries] = await Promise.all([
+    const [contact, subs, invite, campaigns, deliveries, bookings] = await Promise.all([
       prisma.contactMessage.count(),
       prisma.subscriber.findMany(),
       prisma.inviteResponse.count(),
       prisma.emailCampaign.count({ where: { status: "RUNNING" } }),
       prisma.emailDelivery.count({ where: { status: "SENT" } }),
+      prisma.booking.count({ where: { status: "PENDING" } }),
     ]);
-    
+
     contactCount = contact;
     totalSubs = subs.length;
     activeSubs = subs.filter(s => s.status === "active").length;
     inviteCount = invite;
     runningCampaigns = campaigns;
     totalSentEmails = deliveries;
+    pendingBookings = bookings;
   } catch {
     // DB not connected yet
   }
@@ -68,6 +71,26 @@ export default async function AdminDashboard() {
           </Link>
         ))}
       </div>
+
+      {pendingBookings > 0 && (
+        <Link
+          href="/admin/bookings"
+          className="flex items-center justify-between gap-4 mb-12 p-5 border border-blue-400/25 bg-blue-500/10 rounded-2xl hover:bg-blue-500/15 transition-colors"
+        >
+          <span className="flex items-center gap-3">
+            <CalendarClock className="w-5 h-5 text-blue-300" />
+            <span>
+              <span className="block font-bold">
+                {pendingBookings} booking request{pendingBookings === 1 ? "" : "s"} waiting
+              </span>
+              <span className="block text-sm text-white/50">
+                Review and accept to create the calendar event and send the meeting link.
+              </span>
+            </span>
+          </span>
+          <span className="text-sm text-blue-200 shrink-0">Open bookings →</span>
+        </Link>
+      )}
 
       <h2 className="text-xl font-bold mb-6">Quick Actions</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

@@ -39,13 +39,18 @@ export function Navbar() {
   // Hide the public navbar on admin and lab invite pages
   if (pathname?.startsWith("/admin") || pathname?.startsWith("/lab/invite")) return null;
 
+  // Section links are anchors on the home page. From any other route they must
+  // point back at "/" first, otherwise "/book#about" lands nowhere.
+  const isHome = pathname === "/";
+  const sectionHref = (hash: string) => (isHome ? hash : `/${hash}`);
+
   const links = [
-    { name: "About", href: "#about" },
-    { name: "Experience", href: "#experience" },
-    { name: "Work", href: "#work" },
-    { name: "Skills", href: "#skills" },
+    { name: "About", href: sectionHref("#about") },
+    { name: "Experience", href: sectionHref("#experience") },
+    { name: "Work", href: sectionHref("#work") },
+    { name: "Skills", href: sectionHref("#skills") },
     { name: "Book", href: "/book" },
-    { name: "Contact", href: "#contact" },
+    { name: "Contact", href: sectionHref("#contact") },
   ];
 
   const handleLinkClick = () => {
@@ -66,7 +71,7 @@ export function Navbar() {
         )}
       >
         <a
-          href="#hero"
+          href={sectionHref("#hero")}
           onClick={() => setMobileOpen(false)}
           className="font-display font-bold text-2xl tracking-tighter cursor-pointer text-white hover:opacity-80 transition-opacity"
         >
@@ -85,7 +90,7 @@ export function Navbar() {
             </a>
           ))}
           <a
-            href="#contact"
+            href={sectionHref("#contact")}
             className="px-4 py-2 text-xs font-semibold uppercase tracking-wider rounded-full border border-white/20 hover:bg-white hover:text-black transition-all"
           >
             Get in touch

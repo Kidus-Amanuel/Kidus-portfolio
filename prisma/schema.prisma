@@ -120,7 +120,7 @@ model Answer {
 model SiteSettings {
   id           String   @id @default("global")
   contactEmail String   @default("kidusamanuel@yahoo.com")
-  senderEmail  String   @default("contact@kidus.dev")
+  senderEmail  String   @default("kidusamanuel0371@gmail.com")
   githubUrl    String   @default("https://github.com/Kidus-Amanuel")
   linkedinUrl  String   @default("https://linkedin.com/in/kidus-amanuel")
   instagramUrl String   @default("")

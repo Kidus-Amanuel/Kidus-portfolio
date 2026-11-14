@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/admin/'], // Hide your future admin dashboard from Google
     },
-    sitemap: 'https://kidus.dev/sitemap.xml',
+    sitemap: 'https://kidus-portfolio-gray.vercel.app/sitemap.xml',
   }
 }

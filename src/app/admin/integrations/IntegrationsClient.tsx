@@ -295,7 +295,7 @@ export default function IntegrationsClient() {
               field={{
                 key: "APP_URL",
                 label: "App URL",
-                placeholder: "https://kidus.dev",
+                placeholder: "https://kidus-portfolio-gray.vercel.app",
                 help: "No trailing slash.",
               }}
               value={values.APP_URL ?? ""}

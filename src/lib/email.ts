@@ -26,11 +26,11 @@ async function resolveSender(): Promise<{ email: string; name: string }> {
   try {
     const settings = await prisma.siteSettings.findUnique({ where: { id: "global" } });
     return {
-      email: settings?.senderEmail?.trim() || "contact@kidus.dev",
+      email: settings?.senderEmail?.trim() || "kidusamanuel0371@gmail.com",
       name: "Kidus Amanuel",
     };
   } catch {
-    return { email: "contact@kidus.dev", name: "Kidus Amanuel" };
+    return { email: "kidusamanuel0371@gmail.com", name: "Kidus Amanuel" };
   }
 }
 
@@ -141,5 +141,5 @@ export async function getHostEmail(): Promise<string> {
   } catch {
     // fall through
   }
-  return process.env.GMAIL_USER || "contact@kidus.dev";
+  return process.env.GMAIL_USER || "kidusamanuel0371@gmail.com";
 }
